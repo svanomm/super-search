@@ -1,0 +1,270 @@
+NBER WORKING PAPER SERIES
+
+THE MORTALITY EFFECTS OF HEALTHCARE CONSOLIDATION: EVIDENCE FROM EMERGENCY DEPARTMENT CLOSURES
+
+Pinka Chatterji Chun-Yu Ho Xue Wu
+
+Working Paper 32189 http://www.nber.org/papers/w32189
+
+NATIONAL BUREAU OF ECONOMIC RESEARCH 1050 Massachusetts Avenue Cambridge, MA 02138 March 2024
+
+The research was supported in part by grant, P30AG66583, Center for Aging and Policy Studies, awarded to  Syracuse  University,  in  consortium  with  Cornell  University  and  the  University  at Albany, by the National Institute on Aging of the National Institutes of Health. The content is solely the responsibility of the authors and does not necessarily represent the official views of the National  Institutes  of  Health The  views  expressed  herein  are  those  of  the  authors  and  do  not necessarily reflect the views of the National Bureau of Economic Research.
+
+NBER working papers are circulated for discussion and comment purposes. They have not been peer-reviewed or been subject to the review by the NBER Board of Directors that accompanies official NBER publications.
+
+ © 2024 by Pinka Chatterji, Chun-Yu Ho, and Xue Wu. All rights reserved. Short sections of text, not to  exceed  two  paragraphs,  may  be  quoted  without  explicit  permission  provided  that  full credit, including © notice, is given to the source.
+
+The Mortality Effects of Healthcare Consolidation: Evidence from Emergency Department
+
+Closures Pinka Chatterji, Chun-Yu Ho, and Xue Wu NBER Working Paper No. 32189 March 2024 JEL No. I10,I11
+
+ABSTRACT
+
+We  examine  whether  loss  of  emergency  department  services  is  associated  with  county-level mortality rates  in  rural  areas  over  the  period  2005-2018.  We  use  a  propensity-weighted difference-in-difference approach, comparing counties that lost emergency department services to counties that retained them during our period. In the full sample, we find no effects of emergency department closure on all-cause mortality; drug, alcohol, and suicide deaths; or AMI mortality. We find that closure is associated with increased drug-related deaths among white and youngeraged females, and in the Midwest and the West, as well as an increase in AMI mortality in the South and West.
+
+Pinka Chatterji State University of New York at Albany Economics Department 1400 Washington Avenue Albany, NY  12222 and NBER pchatterji@albany.edu
+
+Chun-Yu Ho Economics Department State University of New York at Albany 1400 Washington Avenue Albany, NY 12222 cho@albany.edu
+
+Xue Wu State University of New York at Albany xwu9@albany.edu
+
+1. Introduction
+
+Since 2005, about 200 rural hospitals in the U.S. have closed, and the remaining face rising risk of closure (Bai et al. 2020; Sheps Center 2023). 1 These closures are part of a broader trend in rural health care systems - the regionalization of services to out-of-market hospital systems, in  response  to  multiple  challenges  such  as  shrinking  and  relatively  unhealthy  patient populations  (Frakt,  2019);  high  rates  of  public  insurance  and  uninsurance;  and  lower reimbursement rates for rural health care providers. One consequence of hospital closures is that many rural communities have lost their emergency department services. EDs play a major role in providing health care in these areas, mainly due to chronic provider shortages and high fixed costs of providing hospital care in rural areas (Alexander & Richards, 2021; Wishner et al., 2016; Gong et al. 2019). Thus, it is imperative for policymakers to understand the effects of ED closures on health outcomes when considering the consequences of hospital consolidation and closures in rural communities.
+
+In this paper, we study how losing access to hospital-based ED services affects mortality in rural U.S. counties,  focusing on mortality from  behavioral health and time-sensitive conditions.  We argue that there are close links between ED closures and  these types of mortality. First, EDs often serve as safety-net providers for people with mental health and substance abuse (MH/SA) disorders since rural areas tend to lack specialized behavioral health services (Wishner, 2016; Holland et al. 2021). As of 2022, 66 percent of US residents in rural communities lived in areas classified as mental health provider shortage areas (HRSA, 2019). When a rural community loses hospital-based ED services, there may be no alternative place to obtain care for acute events related to MH/SA. As of 2019, there were 8 million SArelated ED visits in the US (28.5 SA-related ED visits per 1,000 population), comprising about 6 percent of all ED visits, with about a third of these visits leading to inpatient stays (Owens & Moore, 2022). Thus, one mechanism through which ED closure may affect health is the loss of acute care for behavioral health-related needs.
+
+Second, lack of access to a nearby ED may impede access to care if patients need to travel farther to access services. In a study of 64 rural hospitals that closed between 2013 and 2017 and  had offered ED services, the GAO reports that  the  straight-line  distance to an ED
+
+increased from 3.3 miles in 2012 to 24.2 miles in 2018 for people living in the service areas of the closed hospitals (US GAO, 2020). Thus, in sparsely populated areas, a second mechanism through which ED closure may affect health is greater travel distance, leading to prolonged response time for time-sensitive conditions such as acute myocardial infarction (AMI).
+
+Our  empirical  analysis  is  based  on  individual-level  data  from  Vital  Statistics  death certificate records for the period 2005-2018 and county-level data with information on ED closures and socioeconomic characteristics. Given the key role of EDs in rural areas in providing care for individuals with MH/SA disorders, we focus on effects of ED closure on deaths of despair, namely mortality from drug overdose, alcohol liver-related diseases and suicide (Case and Deaton 2015, 2017 and 2020). We also consider mortality from AMI, a particularly time-sensitive condition, to inform how ED closures affect mortality through increasing  travel  time  to  treatment.  We  construct  a  propensity-weighted  difference-indifference (DiD) setting by defining the treatment group as rural counties that had hospitalbased ED services at the start of the analysis period but lost ED services during the study period (the definition of ED closure is discussed in detail in later sections) and defining the comparison group as rural counties that had ED services and retained them during the entire study period. The propensity-weighted approach also takes into account that some control counties may be more likely to experience ED closure than others based on observables.
+
+Our empirical analysis leads to several conclusions. First, our baseline results show that, on average, counties experiencing loss of ED services do not experience a significant increase in deaths of despair or AMI mortality over the three-year period around the time the ED closes. There are weakly significant impacts on drug-related mortality rates in the three-year period around the time the ED closes because these results are driven by certain demographic groups (discussed further below). Our baseline results are robust to the use of alternative definitions of ED closure; the inclusion of potential confounders, such as the existence of urgent care centers in the focal county; and to a placebo test, in which ED closure is randomly assigned to counties.
+
+Further, we find substantial heterogeneity  in our results. First, we find drug-related deaths among white females and younger-aged (15-44) females are responsive to ED closure, and there is geographical heterogeneity, with drug-related deaths in Midwest and the West increasing in response to ED closure. In addition, we find that in the South and West Census
+
+Regions, rural counties experiencing loss of ED services experience increased mortality from AMI during the three years spanning the timing of the loss. These results support the idea that, for some sub-populations, ED closures drive mortality in rural areas through both of our proposed mechanisms: losing ED services may force patients to forgo acute behavioral health care and/or to travel farther to treat time-sensitive illnesses.
+
+Our paper contributes to the literature on the health effects of healthcare consolidation in the  rural  U.S.  Although  rural  hospital  closures  are  a  part  of  this  trend  in  healthcare consolidation, existing studies find mixed effects of such closures on mortality. For example, Joynt et al. (2015) do not find that rural hospital closures affect mortality, but Gujral and Basu (2020) find rural hospital closures increase mortality from stroke and AMI. Recent literature also examines the effects of specific hospital units closing on health in rural counties. For example,  some research suggests that rural  obstetric  unit closures have  little  impact on maternal or infant health on average but have a more negative effect on infant health among Black mothers (Chatterji et al. 2023; Battaglia 2024; Fischer et al. 2024).  Unlike ED care, obstetric care often can be planned in advance; thus, patients may be able to overcome lack of provider supply in their local areas by advanced scheduling and arranged transportation. Our work differs from prior research in that we examine ED care for behavioral healthrelated and time-sensitive conditions, for which the care is more difficult to plan in advance.
+
+Our work also contributes to the literature on explaining deaths of despair initiated by the seminal works of Case and Deaton (2015, 2017, 2020). In a closer relationship to our work, there is a recent and growing  literature studying deaths of despair among women. For instance, Mazure and Fiellin (2018) suggest that women are more likely than men to access drugs through medical treatment as they may be more sensitive to pain and more likely to suffer from anxiety and chronic pain. VanHouten (2019) find drug-related deaths among middle-aged women aged 30-64 years increased during 1999-2017.  The rise in overdose deaths  is  more notable from synthetic opioids, heroin,  and benzodiazepines, which can potentially be used for pain relief and as an antidepressant. Our work is novel in showing that ED closures contribute to drug-related deaths for females in rural counties. It suggests the ED closures may hinder the access of prescribed opioids and the provision of SA disorder treatment, which may put some women with SA disorder at higher mortality risk.
+
+Further, our paper contributes to the literature on how  loss of EDs  affect mortality through increased travel distance impeding access to care for time-sensitive conditions. Shen and Hsia (2012) use patient-year level nationwide data over the period 1995-2005. They find that a longer travel time to the nearest ED, due to ED closure, relates to a higher 30-day to 1year mortality rates from AMI for patients discharged from hospital. Hsia and Shen (2019) also examine a dataset at the patient-year level nationwide data from 2001 to 2013 and find that a nearby ED closure relates to a higher 1-year mortality rates from AMI for patients discharged from hospitals. 2
+
+Our study extends prior literature in two aspects. First, our study differs from previous work in that we use death certificate data instead of data from patients admitted to hospitals. Our  study  provides  information  about  the  effect  of  ED  closure  on  the  general  rural population  while  the  previous  studies  focus  on  a  particularly  vulnerable  population  patients admitted to hospitals at the time of the study. An advantage of our sample is that it also includes mortality among those not admitted to hospitals; for example, our data would include a patient who lacked access to an ED and then passes away before being admitted to a hospital. Second, previous studies do not address the selection problem; rural ED closures are likely to happen in particularly  disadvantaged areas, with poorer and less healthy populations. 3 Our  propensity  score  reweighting  DiD  model  addresses  this  selection problem with observables and finds a weaker impact of ED closure on AMI mortality for the general, rural population compared to samples of patients admitted to hospitals.
+
+The remaining sections of this paper are organized as follows. Section 2 discusses the data and empirical methodology. Section 3 presents the empirical findings. Section 4 concludes.
+
+2. Data and Empirical Strategy
+
+Our empirical procedure comprises four steps. First, we construct two sets of mortality variables. We begin with a set of mortality rates capturing deaths of despair, namely drug overdoses, alcohol liver-related diseases and suicide (Case and Deaton 2015, 2017 and 2020).
+
+We also analyze mortality from acute myocardial infarction (AMI), a time-sensitive illness, following Shen and Hsia (2012) and Hsia and Shen (2019).
+
+Second, we construct a measure of ED closure: a county that had at least one ED operated by a hospital at the start of our analysis period but lost hospital-based ED services during our study period. Third, we estimate a propensity score (PS) to be treated, i.e. experiencing a loss  of  hospital-based  ED  services  during  our  study  period,  based  on  county-level socioeconomic characteristics  and  the  state's ACA Medicaid expansion status. Fourth, to estimate  the  effects  of  losing  hospital-based  ED  services  on  mortality,  we  construct  a difference-in-difference (DiD) setting by using the mortality rate in closure counties as the treatment group and the mortality in the remaining rural counties (that retained ED services) as the comparison group. To account for non-random selection into the closure county status based on observables, we weight the control counties with propensity scores (Abadie 2005). Further, we construct our estimator to be doubly robust by employing county-specific fixed effects  to  control  for  unobserved  county  heterogeneity  and  including  observed  county characteristics to control for heterogeneity across rural populations (Sant'Anna and Zhao, J. 2020).
+
+Our empirical analysis employs information from three datasets. We use the restrictedaccess 2005-2018 U.S. Vital Statistics Mortality files (death certificates) with state and county identifiers from the National Center for Health Statistics. The information on ED closures comes from the American Hospital Association (AHA) Annual Survey Database and the Area Health Resources File (AHRF). To examine how ED closures affect mortality, we use the  counties  of  residence  on  the  death  certificates  to  merge  the  mortality  files  to  the information about ED closures at the county-year level. The unit of analysis in our study is the death rate per 100,000 persons at county-year level.
+
+The  sample  is  limited  to  rural  counties,  defined  as  counties  having  a  rural-urban commuting area (RUCC) code between 4-10. 4 This definition is also used by policy makers and in academic studies. For example, the Federal Office of Rural Health Policy (FORHP) considers all non-metro counties with RUCA codes from 4-10 as rural. Previous studies on various issues related to rural health care, such as Ermann (1990), Newkirk and Damico (2014)
+
+and Kaufman (2016), also use this definition of rural areas. Further, our sample excludes death records from Alaska and Hawaii, and we drop death records with death occurrence counties located more than 250 miles from decedents' residence counties.
+
+2.1.  Mortality-related Outcome Variables
+
+We examine mortality rates from drug overdose, alcohol-related liver disease, suicides, and acute myocardial infarction (AMI) (see Appendix A1 for relevant ICD-10 codes). The first three outcomes capture the deaths of despair proposed by Case and Deaton (2015, 2017, 2020), Lundberg et al. (2023) and Auger et al. (2022). The fourth outcome captures mortality from the same time sensitive condition examined in Shen and Hsia and (2012) and Hsia and Shen (2019). Suicide deaths are categorized based on intentional self-harm (suicide) based on ICD -10 (Lundberg et al., 2023 and Auger et al., 2022).
+
+[Insert Table 1 here]
+
+Table 1 reports the descriptive statistics of our sample counties. On average, the mortality rates per 100,000 people are about 11.64 for drug overdose, 13.83 for alcohol poisoning and 11.64 for suicide, respectively. The mortality rate for AMI is higher than those for deaths of despair at 73.82 per 100,000 people. These rates are consistent with those reported in existing studies, such as Hedegaard et al. (2018), Hedegaard and Spencer (2021) and Ariss et al (2022).
+
+2.2.  Identifying ED Closure
+
+To create the ED closure measure, we use data on the number of ED visits (to define the treatment group) and the number of short-term general (STG) hospitals with EDs (to define the  control  group)  in each county/year in  the AHRF. We  discuss  the details of how we identify ED closure, as well as our data limitations,  in Appendix A2.  For the treatment variable, we construct a binary variable of ED closure, which turns on permanently to one if the number of ED visits in the county drops by at least 75% this year compared to the prior year, and zero otherwise. Moreover, we require the ED visits in all years after the 75% drop to be lower than 50% of the ED visits in the year before the 75% drop. This criterion mitigates
+
+the possibility that when a rural county loses its hospital-based ED services, it may fully regain services. This approach to identifying ED closures is similar to that of Fischer et al. (2024) and Battaglia (forthcoming), who study OB unit closures. For the control group, we require that the county has at least one ED operated by a hospital in all years (2005-2018).
+
+Figure 1A illustrates the number of ED closures by year during our sample period. About one-third of the closures occur before 2015, while the rest occur in and after 2015. Figure 1B is a map depicting the locations of the counties losing hospital-based ED services during our sample period. There are 859 rural counties that comprise the study sample. 5 There are 59 counties colored in red, in which ED closure occurred between 2005 and 2018. Among them, there are 17 in Midwest, 37 in the South and 5 in the West. The 800 counties, colored in blue, are those in which at least one ED remained open throughout the study period. In our sample, about 7% of observations have Closure = 1 (see Table 1).
+
+[Insert Figure 1 here]
+
+2.3.  Propensity Score Reweighting Approach
+
+In our setting, the comparison of mortality before and after ED closure provides withincounty variation in treatment status that lends itself to a DID approach. What is needed is a control group to address contemporaneous mortality trends in the ED closure counties. The selection of a control group is complicated by pre-closure differences in mortality trends between counties which did or did not experience ED closure. For example, a county with a poorer and more uninsured population may drive ED closures (through uncompensated treatment  of  the  uninsured)  and  mortality  (through  low  socioeconomic  status) simultaneously. In fact, Table 1 reports that the closure counties have higher mortality rates from drug overdoses, alcohol-related liver disease, and AMI than no closure counties. The suicide death outcome shows similar mortality rates between treated and control groups. Further, the closure counties have higher unemployment rates, uninsurance rates, poverty rates and SNAP receipt rates and have lower physician density than the no closure counties.
+
+We use a propensity score reweighting approach to control for this selection issue driven
+
+by  county  characteristics.  Specifically,  following  Hsia  et  al.  (2011),  we  postulate  that demographic and market characteristics are useful in modeling ED closure. Such a model is also  consistent with the structural entry model of health care providers in the spirit of Bresnahan and Reiss (1991), Dranove et al. (1992) and Abraham et al. (2007), which suggests that demographic characteristics are important determinants of firm entry. To estimate the propensity score, we  assume  that  whether a  county experiences loss of ED  services  is governed by a Logit model:
+
+𝐿𝐿𝐿𝐿𝐿𝐿𝐿𝐿𝐿𝐿 ( 𝐶𝐶𝐶𝐶𝐿𝐿𝐶𝐶𝐶𝐶𝐶𝐶𝐶𝐶 𝑖𝑖 ∗ ) = 𝑋𝑋𝑖𝑖𝛼𝛼 + 𝜂𝜂𝑖𝑖 , 𝐶𝐶𝐶𝐶𝐿𝐿𝐶𝐶𝐶𝐶𝐶𝐶𝐶𝐶𝑖𝑖 = 1{ 𝐶𝐶𝐶𝐶𝐿𝐿𝐶𝐶𝐶𝐶𝐶𝐶𝐶𝐶 𝑖𝑖 ∗ ≥ 0}
+
+where 𝜂𝜂𝑖𝑖 ~ 𝐿𝐿𝐿𝐿𝐿𝐿𝐿𝐿𝐶𝐶𝐿𝐿𝐿𝐿𝐿𝐿 (0,1) 𝑎𝑎𝑎𝑎𝑎𝑎 𝐶𝐶𝐶𝐶𝐿𝐿𝐶𝐶𝐶𝐶𝐶𝐶𝐶𝐶𝑖𝑖 = 1 if  county i experiences loss of ED services, and 𝐶𝐶𝐶𝐶𝐿𝐿𝐶𝐶𝐶𝐶𝐶𝐶𝐶𝐶𝑖𝑖 = 0 otherwise.  The set of explanatory variables 𝑋𝑋𝑖𝑖 includes  the  unemployment rate, uninsured rate, poverty rate, SNAP receipt rate, number of physicians per 1,000 people, and the proportions of male and female populations in various age groups. All explanatory variables are measured in 2005, the first year of the analysis period, to ensure that hospital closures are not driving the sociodemographic characteristics of the counties. We also include an indicator of 'ACA Medicaid expansion,' which means that the county is in a state that had expanded Medicaid before  2018,  with zero indicating that the  state either has not expanded or did so after 2018.
+
+Appendix Table B1 reports the results of Logit estimation where the dependent variable 𝐶𝐶𝐶𝐶𝐿𝐿𝐶𝐶𝐶𝐶𝐶𝐶𝐶𝐶𝑖𝑖 = 1 if county i experiences ED closure over our sample period, and 𝐶𝐶𝐶𝐶𝐿𝐿𝐶𝐶𝐶𝐶𝐶𝐶𝐶𝐶𝑖𝑖 = 0 otherwise. Notably, the 'ACA expansion' variable is associated with about a 3.7 percentage point decrease at the sample mean. This finding is consistent with Lindrooth et al. (2018), who finds that hospitals located in Medicaid expansion states are about 84 percent less likely to close compared to similar hospitals in non-expansion states. Further, counties with a higher uninsurance rate and an older population are more likely to experience a loss of ED services over the sample period.
+
+Appendix Figure B1 depicts the propensity scores computed with the Logit estimation. 'On support' means that we are able to find a matched county. Conversely, 'off support' means that we are not able to find a matched county. Overall, the assumption of common support is mostly verified. To ensure that the matched counties are useful and appropriate,
+
+we only keep the on-support treated counties in our empirical analysis. Table 1 reports the characteristics of treated and control counties. The treated and unweighted control counties are different across a range of covariates. Our propensity score weighting gives more weight to counties with higher uninsurance rates and higher proportions of the older population groups and without Medicaid expansion because they are more like the treated counties. The biases are reduced after the propensity score weighting, and there are no longer significant differences between treated and propensity score weighted control counties in the covariates.
+
+2.4.  Difference-in-Difference (DiD) Model
+
+Let Y(0) and Y(1) denote potential mortality, where 0 denotes no closure and 1 denotes closure. The observed outcome for a county is Y = Closure x Y(1) + (1-Closure) x Y(0). To examine  how  ED  closure  affects  mortality rates in rural  areas,  we wish to estimate the average treatment effect on the treated (ATT), i.e. the parameter α where
+
+α = E(Y(1)-Y(0)|Closure=1) = E(Y(1)|Closure=1) - E(Y(0)|Closure=1)
+
+The last term on the right-hand side is not observed. To estimate it, we use propensity score weighting according to the previous section. Using the reweighting estimator in the spirit of Abadie (2005), we correct for possible remaining covariate bias between the closure and no closure counties using weighted regression, with weights equal to 𝑃𝑃𝑃𝑃 � ( 𝐶𝐶𝐶𝐶𝐶𝐶𝐶𝐶𝐶𝐶𝑃𝑃𝐶𝐶 𝑖𝑖 =1 | 𝑋𝑋 𝑖𝑖 ) 1-𝑃𝑃𝑃𝑃 � ( 𝐶𝐶𝐶𝐶𝐶𝐶𝐶𝐶𝐶𝐶𝑃𝑃𝐶𝐶 𝑖𝑖 =1 | 𝑋𝑋 𝑖𝑖 ) for all counties in the control group. The reweighting and regression adjustment leads our ATT  to  be  doubly  robust  (Sant'Anna  and  Zhao,  J.  2020).  Specifically,  we  estimate  the following equation:
+
+Mortalityit = α 1 · 1{-1 ≤∆t≤ 1} × Closurei + α 2 · 1{2 ≤∆t≤ 3} × Closurei + Xit β + γ County + γ Year + ε it (1)
+
+The dependent variable Mortalityit represents the mortality rate per 100,000 persons from the causes of death discussed in Section 2.1 for county i at year t . Closurei is an indicator for the county experiencing loss of ED services in our sample period. Let ∆ t ≡ t - tClosure so the event time indicator 1 {∆t=r} represents r years before ( r < 0 ) or after ( r ≥ 0 ) the year of the ED
+
+closure ( tClosure ). The parameter α 1 is the coefficient on the interaction between the event time indicators 1{-1 ≤∆t≤ 1} and Closurei , that is, 1{-1 ≤∆t≤ 1} × Closurei . Since we choose the two years before the ED closure, that is, r ≤ -2, as the baseline years in the analysis, the parameter α 1 measures the difference in mortality rates between closure and no closure counties at year -1 ≤ r ≤ 1 relative to the baseline year (the 'early' period). Analogously, the parameter α 2 measures the difference in mortality rates between closure and no closure counties at year 2 ≤ r ≤ 3 relative to the baseline year (the 'late' period).
+
+Furthermore, to capture the effects of county characteristics on mortality rates, we include a similar set of observed county characteristics Xit used in propensity score function, with the difference being that the Xi used in the PSW comes from the beginning of study period, which is the year 2005; and Xit used in the DiD are measured at the county-year level during whole time period. 6 To control for effects of unobserved county heterogeneities on the outcome variables, we include  a set  of  county-specific  fixed effects γ County .  The year-specific fixed effects γ Year control  for  the aggregate shocks  to  mortality rates, such as the nationwide availability of certain drugs. The random variable ε jt is an error term.
+
+3. Empirical Results
+
+We first report the results from event studies and then discuss the estimated coefficients of the effects of ED closure on mortality by cause based on the propensity score reweighted DiD approach. Second, we consider a range of robustness checks of our main findings. Third, we explore the heterogeneities in our results and delve into understanding the effects of ED closure on drug-related deaths by utilizing place of death information available on the death certificates.
+
+3.1. Main Findings
+
+Event Study. Figure 2 depicts the results from an event study (see the line labeled TWFE), which allows us to assess pre-trends in mortality outcomes and justify the specification of the DiD model. Prior to ED closure, most point estimates for mortality are near zero. We
+
+conclude from these figures that there is no evidence of pre-closure mortality trends. Further, we observe a temporary and weak effect on drug-related mortality in the post-closure period, which justifies the use of DiD model with two post-closure periods: (1) years -1 to 1 (from the year before closure to the year after closure); and (2) years 2 and 3 (the two subsequent years).
+
+[Insert Figure 2 here]
+
+Since the ED closure timing varies across counties, we address the potential issue of bias caused  by staggered timing of ED  closure  and treatment effect heterogeneity.  First, we conduct a test following Goodman-Bacon (2021) and find the main source of identification in our setting is the comparison between treated and never treated (see Appendix C for details). Second,  we re-estimate our event study using three of the newly developed estimation routines, namely Sun and Abraham (2020; SA), Callaway and Sant'Anna (2021; CS) and Borusyak et al. (2021). We compare the estimates from those three methods against our TWFE model and find the results of the TWFE models are consistent with all three alternative models. In sum, these results show the TWFE model is robust to the heterogeneity in closure timing in our setting. Thus, we proceed with the TWFE model to conduct the DiD estimation.
+
+DiD Model. Figure 3 depicts the coefficients of 1{-1 ≤∆t≤1} × Closurei ( Early ) and 1 {2≤∆t≤3} × Closurei ( Late ) of our DiD model for the whole sample. Across all  outcomes,  the point estimates are statistically insignificant at the 5% level. Further, we include all-cause mortality as an outcome variable and do not find any significant effect of ED closure on it. Nonetheless, there are weakly significant impacts on drug-related in the two years around the ED closure. We explore this finding further in later section.
+
+[Insert Figure 3 here]
+
+3.2. Robustness Checks
+
+We conduct a series of checks to examine how our baseline results are  robust to an alternative definition of ED closure;  to the availability of alternative providers;  and to a placebo test. The results of robustness checks are reported in Appendix Table D1.
+
+Alternative definition of ED closure . Our treatment variable in the baseline results does
+
+not allow ED visits to regain more than 50% of ED visits at t-1. Here, we impose a stricter requirement, which does not allow ED visits to regain more than 25% of ED visits at t-1. Column 1 reports the results of this specification, which are consistent with our baseline results.
+
+Substitutes  for  ED  services  and  temporary  closures .  When  rural  communities  lose hospital-based EDs, they may gain similar services in a later year. Some recent studies find that urgent care centers (UCCs) can be substitutes for EDs (Allen et al. 2021). Other potential substitutes include freestanding EDs (EDs not based at hospitals), and hospital-based EDs in nearby counties. This brings up one concern, namely that the existence of good substitutes may confound our main findings.
+
+To address this concern, we consider the following robustness checks. First, we show DiD findings when we limit the treatment group to counties that lost ED services and also had no good within-county substitutes. Specifically, we consider counties that: (1) had no UCCs in the years after closure (Column 2); and (2) had no freestanding outpatient centers in the years after closure (Column 3). Encouragingly, the results are consistent with our main findings in Figure 3. In summary, our robustness checks support the validity of our main findings.
+
+Placebo Test. One drawback of our approach is that we are performing multiple statistical tests simultaneously; thus, we need to use caution in interpreting the findings, since some will be statistically significant by chance. In addition, there remains the possibility that our results are influenced by omitted variables. To address these issues, we conduct a placebo test by randomly assigning the ED closure to our sample counties. Given the random data generating process, the PLACEBO-Closure variable should not have a statistically significant estimate, with a magnitude close to zero. Otherwise, it would indicate a misspecification of our empirical model.
+
+We estimate Eq. (1) with the PLACEBO-Closure variable. To increase the identification power of the placebo test, we repeat the regression 500 times. Appendix Figure D1 shows the distribution of coefficients of PLACEBO-Closure for drug-related mortality as the outcome variable. The distribution of coefficients of PLACEBO-Closure is clearly centered at around zero, suggesting that there is no effect with the PLACEBO-Closure variable. 7
+
+3.3. Heterogeneities
+
+We explore possible heterogeneity in our results in order to reveal potential mechanisms through which ED closures may affect certain sub-populations. There are a large number of coefficients reported in Table 2; we discuss those that are significant at the 5% level.
+
+Demographic Groups : Given well-documented mortality disparities across demographic groups in drug overdoses and in AMI (Case and Deaton 2015, 2017, 2020; Dani et al. 2022), we explore whether certain groups are disproportionally affected by ED closure. Table 2 presents the corresponding  results  for various race,  gender,  and  age  sub-samples. 8 The estimated  coefficients  are  generally  statistically  insignificant,  but  there  are  few  results elaborating our main findings.
+
+Results for drug-related deaths are driven by effects on white females and young females (Columns 4 and 10). There are 3.888 and 7.350 additional drug-induced deaths per 100,000 white females and younger females in the early period around ED closure, respectively. Further, the 3.888 additional drug-related deaths per 100,000 white females is equivalent to a 29.6 percent increase relative to the average drug-related death rate of white females, which is 13.14 per 100,000 white females. Similarly, the 7.350 additional drug-related deaths per 100,000 younger females is equivalent to a 50.1 percent increase relative to the average drugrelated death rate of younger females.
+
+Existing studies typically find that Black and white males have higher mortality from drug overdoses. Our findings suggest that ED closures do not marginally affect drug-related mortality for males but do affect certain groups of females. One possible explanation as to why females are affected rather than males is that ED closures possibly hinder the provision of prescribed opioids to females in rural communities, as specialized SA disorder treatment centers may be unavailable. Mazure and Fiellin (2018) argue that females are more likely to obtain opioids through medical treatment because they are more sensitive to pain and are more likely suffer from anxiety and chronic pain. ED closure possibly may raise their actual and  opportunity  costs  of  obtaining  prescribed  opioids,  which  in  turn  drives  them  to unofficial sources of opioids, raising their drug-related mortality.
+
+[Insert Table 2 here]
+
+Census Regions : Columns 13-15 of Table 2 presents the corresponding results for each Census  region. The estimated coefficients are generally insignificant, but there are some interesting and significant results.
+
+First, the estimated coefficients are significant for drug-related deaths for the early period after ED closure for Midwest and West census regions. For population aged 15 or above, an ED closure was associated with 42.6 and 86.9 percent increase in drug-related deaths per 100,000 persons relative to a scenario where there was ED services in Midwest and West census regions, respectively. These two census regions have the highest drug overdose death from psychostimulants, for example methamphetamine (Mattson et al. 2021). Methamphetamine is increasing used by females, especially pregnant women (Bruzelius and Martin 2021), which make this regional sub-sample finding consistent with the sub-sample results by demographic groups. Although the Northeast has the highest drug overdose death rate from synthetic opioids (Mattson et al. 2021), there are no ED closures in that Census region and thus we cannot identify the effect of ED closure on drug-related death in that region.
+
+Second,  in  South and West  Census  regions, the estimated coefficients  are  statistically significant for AMI for the early period after ED closure. For population aged 15 or above, an ED closure was associated with 11.2 and 36.5 percent increase in deaths per 100,000 persons due to AMI in the South and West, respectively. Travel times in the South and Mountain region are longer than the other U.S. regions (Carr et a. 2009). These results are consistent with the interpretation that an ED closure increases travel time to the ED, which increases mortality rates from time-sensitive conditions.
+
+Death Location : Finally, we explore the possible mechanisms underlying the impacts of ED closure on drug-related deaths using information on the place of death. For this analysis, we focus on white women and younger women because their drug-related  deaths  are responsive to ED closure. We consider the location of the drug-related deaths: inpatient, outpatient,  on  arrival,  home,  or  other.  The  location  of  the  death  may  provide  some information about mechanisms at work when the local ED closes. Figure 4 depicts that drug-
+
+related deaths are driven by deaths that occur at outpatient facilities and at home.
+
+EDs often serve as safety-net providers for people with MH/SA disorders since rural areas tend to lack specialized behavioral health services (Wishner, 2016; Holland et al. 2021). For example, a person with SA disorder requiring acute detoxification may access care from a rural ED, since a specialized behavioral health care center may not be accessible. After a local ED closes, a person with SA disorder may switch to outpatient facilities for treatment. As a result, the treatment of SA disorder occurs at outpatient facilities and at home, which makes those two locations more likely to be the scenes of drug-related deaths. Those findings corroborate the sub-sample results by demographic groups.
+
+4. Conclusion
+
+Overall, there are two coherent patterns in our results. First, ED closures increase drugrelated mortality for white and younger females, and populations living in the Midwest and West. Drug overdoses have become one of the most important causes of death in the U.S. Our findings suggest that ED closures compound such adverse impacts in two aspects: 1) it impedes follow-up SA disorder treatment at ED and 2) it hinders timely access to hospitalbased  emergency  care  for drug overdose treatment.  Both  leads to a higher drug-related mortality rate for two groups of females.
+
+Second, ED closure increases AMI mortality for populations living in the South and West. ED closures in rural communities have disproportional impact on vulnerable populations, which are the populations living in geographically dispersed regions. This result is consistent with the interpretation that ED closure increases travel time to an ED, which increases the mortality rates of time-sensitive conditions.
+
+The evidence presented in this paper suggests a health cost of ED closure, which is a result of healthcare consolidation. It is of policy interest to offset the odds of ED closure in rural areas.  A  relevant  policy  is  the  2010  Affordable  Care  Act  (ACA)  Medicaid  expansions. Previous work finds that ACA Medicaid expansion reduces the likelihood of rural hospital closure (Lindrooth et al. 2018). Consistently, Table B1 reports that compared to rural counties in states that had expanded Medicaid by 2019, rural counties in states that had not yet
+
+expanded Medicaid as of 2019 have a 3.7 percentage point increase in the probability of experiencing loss of ED services. 9
+
+Until recently, ED closures in rural areas continue to be a topic of high policy relevance at  the  federal  level.  In  December  2020,  the  Consolidated  Appropriations  Act  of  2021 established a new provider type called 'Rural Emergency Hospitals' (REHs). Starting in 2023, some rural hospitals, including CAHs, will be able to convert to REHs, which will be facilities providing outpatient hospital and ED services without offering inpatient services. For some services, REHs will receive higher Medicare reimbursement rates for the services provided than would be the case if the services were provided in a hospital. The idea behind REHs is to maintain ED services even when a rural community can no longer support a full-service hospital (Pink et al., 2021). There is already concern among rural hospitals, however, that Medicare's REH program will cause rural communities to lose needed inpatient services, potentially a disaster if nearby hospitals are too crowded to accept inpatient transfers. 10 In addition to REHs, there are a  growing number of freestanding emergency departments (FSEDs) in the US, which are 24/7 emergency facilities that are not physically connected to a hospital with inpatient services. As of 2016, 11 percent of EDs in the US were considered freestanding (Medpac, 2019).
+
+REHs and FSEDs are likely to change the landscape of emergency care in rural areas, and possibly prevent some of the adverse consequences of ED closures that we document in this study.  In addition, increasing use of telemedicine  may buffer the effects of ED closure, particularly for behavioral health outcomes. Understanding the effectiveness of these new methods of providing care to rural communities is an important topic for future research.
+
+References
+
+Abadie, A., 2005. Semiparametric difference-in-differences estimators. The Review of Economic Studies , 72(1), pp.1-19
+
+Abraham, J.M., Gaynor, M. and Vogt, W.B., 2007. Entry and competition in local hospital markets. The Journal of Industrial Economics , 55(2), 265-288.
+
+Alexander, D. and Richards, M.R., 2023. Economic consequences of hospital closures. Journal of Public Economics , 221, 104821.
+
+Allen, L., Cummings, J.R. and Hockenberry, J.M., 2021. The impact of urgent care centers on nonemergent emergency department visits. Health Services Research , 56(4), 721-730.
+
+Ariss, R.W., Minhas, A.M.K., Issa, R., Ahuja, K.R., Patel, M.M., Eltahawy, E.A., Michos, E.D., Fudim, M. and Nazir, S., 2022. Demographic and regional trends of mortality in patients with acute myocardial infarction in the United States, 1999 to 2019. The American journal of cardiology , 164, 7-13.
+
+Auger, N., Chadi, N., Ayoub, A., Brousseau, É. and Low, N., 2022. Suicide attempt and risk of substance use disorders among female youths. JAMA psychiatry, 79(7), pp.710-717.
+
+Bai, G., Yehia, F., Chen, W. and Anderson, G.F., 2020. Varying Trends In The Financial Viability Of US Rural Hospitals, 2011-17: Study examines the financial viability of 1,004 US rural hospitals that had consistent rural status in 2011-17. Health Affairs , 39(6), 942-948.
+
+Battaglia, E., Forthcoming. The effect of hospital closures on maternal and infant health. American Journal of Health Economics .
+
+Borusyak K, Jaravel X, Spiess J. 2024. Revisiting Event Study Designs: Robust and Efficient Estimation. Review of Economic Studies .
+
+Bresnahan, T.F. and Reiss, P.C., 1991. Entry and competition in concentrated markets. Journal of political economy , 99(5), pp. 977-1009.
+
+Bruzelius, E. and Martins, S.S., 2022. US trends in drug overdose mortality among pregnant and postpartum persons, 2017-2020. JAMA , 328(21), 2159-2161.
+
+Callaway  B,  Sant'Anna  PHC.  Difference-in-differences  with  multiple  time  periods. J Econometrics . 2021;225(2):200-230.
+
+Carr, B.G., Branas, C.C., Metlay, J.P., Sullivan, A.F. and Camargo Jr, C.A., 2009. Access to emergency care in the United States. Annals of emergency medicine , 54(2), 261-269.
+
+Case, A. and Deaton, A., 2015. Rising morbidity and mortality in midlife among white nonHispanic Americans in the 21st century. Proceedings of the National Academy of Sciences , 112(49), 15078-15083.
+
+Case, A. and Deaton, A., 2017. Mortality and morbidity in the 21st century. Brookings papers on economic activity , p.397.
+
+<missing-text>
+<missing-text>
+Shen, Y.C. and Hsia, R.Y., 2012. Does decreased access to emergency departments affect patient outcomes? Analysis of acute myocardial infarction population 1996-2005. Health
+
+services research , 47, 188-210.
+
+Sheps Center, 2023. https://www.shepscenter.unc.edu/.
+
+Sun L, Abraham S. Estimating dynamic treatment effects in event studies with heterogeneous treatment effects. J Econometrics . 2020; 225:175-199.
+
+U.S. Government Accountability Office (US GAO), 2020. Rural hospital closures: Affected residents  had  reduced  access  to  health  care  services.  Report  to  ranking  member committee on Homeland Security and Governmental Affairs, US Senate. GAO-21-93.
+
+VanHouten, J.P., Rudd, R.A., Ballesteros, M.F. and Mack, K.A., 2019. Drug overdose deaths among  women  aged  30-64  years-United  States,  1999-2017. Morbidity  and  Mortality Weekly Report , 68(1), p.1.
+
+Wishner, J., Solleveld, P., Rudowitz, R., Paradise, J. & Antonisse, L., 2016. A look at rural hospital closures and implications for access to care: Three case studies.' Kaiser Family Foundation, Issue Brief .
+
+Woodworth, L., 2020. Swamped: Emergency department crowding and patient mortality. Journal of health economics , 70, 102279.
+
+<missing-text>
+<missing-text>
+Notes: There are 859  counties that comprise the study sample. The 59 red counties (closure) are counties in which ED closure occurred between 2005 and 2018. The 800 blue counties (no closure) are counties, in which at least one ED remained open throughout the duration of the study period.
+
+<missing-text>
+Years before and after ED closure
+
+<missing-text>
+Years before and after ED closure
+
+Notes: Each observation is a county-year combination. The number of observations of our sample = 12,026. Estimates from a model regressing mortality rate (per 100,000) on 1{Year ≤ j -4}, 1{Year = j-3},…, 1{Year = j+2} and 1{Year ≥ j+3}, where year j is the event year of ED closure. The model also includes control variables listed in Panel C of Table 1, county-specific fixed effects and year-specific fixed effects. Each point (and 95% CI) represents estimates from a regression for each cause of death with the use of propensity score to weight the comparison group. Standard errors clustered at the county level
+
+<missing-text>
+Notes: Each observation is a county-year combination. The number of observations of our sample = 12,026. Estimates from a DD model regressing mortality rate (per 100,000) on 1{Year = j -1 to j+1} (early) and 1{Year = j+2 or j+3} (late), where year j is the event year of ED closure. The model also includes control variables listed in Panel C of Table 1, county-specific fixed effects and year-specific fixed effects. Each point (and 95% CI) represents estimates from a regression for each cause of death with the use of propensity score to weight the covariates. Standard errors clustered at the county level.
+
+<missing-text>
+<missing-text>
+Notes: Same as Figure 3.
+
+<missing-text>
+Notes: Each observation is a county-year combination.
+
+<missing-text>
+Note: Same as Figure 3. DV denotes dependent variable. There are no results for Northeast because no closures took place in this region. ***, ** and * denote 1%, 5% and 10% significant levels, respectively.

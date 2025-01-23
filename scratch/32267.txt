@@ -1,0 +1,380 @@
+NBER WORKING PAPER SERIES
+
+DOES CONSOLIDATION IN INSURER MARKETS AFFECT INSURANCE ENROLLMENT AND DRUG EXPENDITURES? EVIDENCE FROM MEDICARE PART D
+
+Pinka Chatterji Chun-Yu Ho Tao Jin Yichuan Wang
+
+Working Paper 32267 http://www.nber.org/papers/w32267
+
+NATIONAL BUREAU OF ECONOMIC RESEARCH 1050 Massachusetts Avenue Cambridge, MA 02138 March 2024
+
+The research was supported in part by grant, P30AG66583, Center for Aging and Policy Studies, awarded to  Syracuse  University,  in  consortium  with  Cornell  University  and  the  University  at Albany, by the National Institute on Aging of the National Institutes of Health. The content is solely the responsibility of the authors and does not necessarily represent the official views of the National  Institutes  of  Health. The  views  expressed  herein  are  those  of  the  authors  and  do  not necessarily reflect the views of the National Bureau of Economic Research.
+
+NBER working papers are circulated for discussion and comment purposes. They have not been peer-reviewed or been subject to the review by the NBER Board of Directors that accompanies official NBER publications.
+
+ © 2024 by Pinka Chatterji, Chun-Yu Ho, Tao Jin, and Yichuan Wang. All rights reserved. Short sections of  text,  not  to  exceed  two  paragraphs,  may  be  quoted  without  explicit  permission provided that full credit, including © notice, is given to the source.
+
+Does Consolidation in Insurer Markets affect Insurance Enrollment and Drug Expenditures? Evidence from Medicare Part D Pinka Chatterji, Chun-Yu Ho, Tao Jin, and Yichuan Wang NBER Working Paper No. 32267 March 2024 JEL No. I1,I11,I13
+
+ABSTRACT
+
+Since the inception of Medicare Part D in 2006, mergers and acquisitions (M&A) and regulatory changes have  led  to  increased  concentration  and  reduced  plan  variety  in  the  standalone prescription drug plan (PDP) portion of the market. We examine how this industry consolidation affects  Medicare  beneficiaries' enrollment  in  PDPs  and  their  out-of-pocket  (OOP)  drug expenditures using individual-level data from the 2006-2018 waves of the Health and Retirement Study  (HRS)  merged  with  PDP  market-level  characteristics. Overall,  we  find  that  lower  plan variety in the PDP market decreases the likelihood that elderly individuals enroll in PDPs, and higher PDP market concentration increases OOP drug expenditures. Our main results are robust to considering possible effects of unobserved individual-level heterogeneity, region-specific time trends,  and  entry/exit  of  insurers,  as  well  as  to  the  use  of  an  alternative  identification  scheme based  on  a  quasi-experimental  design.  Further,  we  find  that  younger,  more  advantaged,  and healthier individuals respond differently to industry consolidation compared to their older, less advantaged, and  sicker  counterparts.  The  former  groups  are  more  likely  to  adjust  their  PDP enrollment  in  response to  reduced  PDP  variety  and  have  higher  OOP  drug  expenditures  in response to increased PDP market concentration compared to the latter groups. Finally, we find that  not  only  do  lower  PDP  variety  and greater  PDP  market  concentration  directly  affect  PDP enrollment  and  OOP  drug  expenditures,  but these  changes  also  affect  Medicare  beneficiaries indirectly through impacting PDP characteristics.
+
+Pinka Chatterji State University of New York at Albany Economics Department 1400 Washington Avenue Albany, NY  12222 and NBER pchatterji@albany.edu
+
+Chun-Yu Ho Economics Department State University of New York at Albany 1400 Washington Avenue Albany, NY 12222 cho@albany.edu
+
+Tao Jin State University of New York at Albany tjin@albany.edu
+
+Yichuan Wang NYS Office of Addiction Services and Supports, Albany wangyichuan89@hotmail.com
+
+1. Introduction
+
+The US is a world outlier in health care spending, devoting about 18 percent of GDP to health care, a higher percentage than any other OECD country (Gunja et al., 2023; Anderson et al. 2018). Health care spending also has been rising faster over time in the US compared to in other OECD countries,  reaching  $4.5  trillion in 2022 (Hartman et al., 2023). Nevertheless, the US does not necessarily provide better quality health care than other OECD countries (Telesford et al., 2023), and many key health indicators in the US lag behind those of other OECD countries (Gunja at el., 2023). Notably, life expectancy at birth is currently about 77 years in the US, which is 3 years lower than the OECD average (Munira et al., 2022). 1
+
+Against this backdrop of high and rising spending, with little obvious benefit for population health at the margin, there is growing concern about the distribution of market power and prices in the US health care sector. Many US health care markets have become increasingly consolidated in recent years (Damberg, 2023), raising questions about the effects of consolidation on prices, health care quality, and access to care. The health insurance market is no exception, where more than 57 percent of metropolitan areas were considered to be highly concentrated as of 2016 (Fulton 2017). Understanding the effects of consolidation in the health insurance market is especially critical given the vast size of this market; 92 percent  of the U.S. population is covered by health insurance, either by private insurance or by public insurance which is often provided by private firms (RAND 2022; Dafny 2015; Keisler-Starkey et al. 2023; Dafny 2021).
+
+In this paper, we focus on the Medicare Part D stand-alone prescription drug plan (PDP) insurer market, and test whether consolidation in this market affects PDP enrollment and consumers' out-ofpocket  drug  expenditures.  To  date,  the  existing  literature  mostly  focuses  on  the  effects  of
+
+consolidation in insurance markets on health insurance premiums. Studying effects on premiums is important since premiums are high and rising. The average yearly premium for family coverage was $23,968 in 2023 and has risen 47 percent since 2013, according to the 2023 Kaiser Family Foundation Employer Health Benefits Survey (Kaiser Family Foundation, 2023a).
+
+In theory, consolidation in health insurance markets can have opposing effects on premiums. On the one hand, consolidation may result in lower premiums because consolidation leads to scale economies and to insurers having stronger negotiating power against health care providers, which potentially lowers premiums (see, for example, Melnick et al. 2011 and Scheffler and Arnold 2017 for evidence on commercial insurance). On the other hand, consolidation in insurer markets can lead to higher premiums because of market power (see Dafny et al. 2012 and Trish and Herring 2015 for evidence on commercial insurance; Dafny et al. 2015 for evidence on ACA Marketplace plans). Prior empirical research shows mixed effects of insurer market consolidation on premiums (see evidence in Scheffler et al. 2016 for ACA Marketplace plans; Ho and Lee 2017 for commercial insurance; Chorniy et al. 2020 and Hill and Wagner 2021 for Medicare Part D). We know much less, however, about the effects of insurer market consolidation on outcomes measured at the individual level -  such as insurance enrollment decisions and individual drug expenditures -  which are closely related to consumers' wellbeing.
+
+Our study, focused on the Medicare Part D stand-alone PDP market, is of particular interest for two reasons. First, Part D is crucial in providing financial security for older people to access their outpatient prescription drugs. As of 2023, more than 50 million of the 65 million people covered by Medicare were enrolled in Part D plans, with 44% of them enrolled in stand-alone PDPs (Medicare Advantage also offers Part D drug plans, called MAPDs) (Kaiser Family Foundation, 2023b). Second, since the rollout of Medicare Part D, the stand-alone PDP market has become more concentrated over time  (Kaiser Family Foundation, 2023b). Also, regulatory changes, such as the 'meaningful
+
+difference requirement' that was in effect between 2011-19, eliminated some stand-alone PDPs. As a result, the number of stand-alone PDPs available decreased from 1,866 in 2007 to 901 in 2019, and the number of insurers offering stand-alone PDPs decreased from 61 in 2007 to 29 in 2019 (see Figure 1 ). Thus, it is of policy interest to understand how industry consolidation in the Part D standalone PDP market may affect program enrollment and out-of-pocket drug expenditures. A notable concern here is that if industry consolidation increases the market power of insurers, it may lead to higher premiums and lower plan quality. As a result, consolidation may result in lower PDP enrollment and higher OOP drug expenditures, which potentially harms consumers.
+
+Our empirical analysis starts with a plan-level dataset of stand-alone PDPs from  Centers for Medicare and Medicaid Services (CMS) Landscape and Enrollment files, which covers the period 2007-2019 across 50 states. We define the product as the stand-alone PDP, and the market area is defined as the individual's current state of residence. We construct two measures at the market level to capture industry consolidation. The first is the total number of plans in each market divided by the number of residents aged 65 and older. This is our measure of plan variety. The second variable is the Herfindahl-Hirschman index (HHI), which is computed across all insurers in each market.  This is our measure of inter-insurer competition at the market level. We match these market-level measures of industry consolidation to individual-level data from the 2006-2018 waves of the restricted version of the Health and Retirement Study (HRS) based on each HRS respondent's state and interview year. Then, we estimate the effects of market-level standalone PDP industry consolidation  on  HRS respondents' PDP enrollment and OOP drug expenditures. Since we include state and year fixed effects (FEs) in our baseline models, identification is based on changes in plan variety and inter-insurer competition over time within markets that deviate from the average.
+
+Our  main  findings  are  that,  for  our  sample  individuals,  lower  plan  variety  decreases  PDP enrollment, and higher concentration increases OOP drug expenditures. Our results are robust to
+
+considering the effect of unobserved individual heterogeneity, region-specific time trends and the entry/exit of insurers. Also, we estimate our model with an instrumental variables (IV) identification strategy. We use duplicated stand-alone PDPs and nationwide M&As as plausibly exogenous shocks to plan availability and HHI, respectively. In particular, the use of duplicated stand-alone PDPs as an instrument is novel in the literature. We then estimate our empirical model using a control function approach and find the results are mostly consistent with our main findings.
+
+Next, we explore heterogeneous effects. We find that our main results on PDP enrollment and OOP drug expenditures are driven by younger,  more educated, white,  and healthier individuals. Intuitively, this makes sense since these individuals are likely to be relatively well-off, may have alternative insurance options, and thus would be less likely to participate in a PDP if plan variety decreases.  Finally, we explore potential channels through which industry consolidation might affect an individual's PDP enrollment and OOP drug expenditures. We find that industry consolidation lowers plan variety, which in turn associates with lower average premiums, lower provision of PDPs with full subsidies (plans with zero premiums for beneficiaries eligible for low-income subsidies), and lower provision of PDPs with enhanced options (PDPs with more generous benefits such as lower deductibles and gap coverage). Higher market concentration increases average premiums, potentially through increasing the availability of enhanced plans, and decreases the availability of plans offering a full subsidy. These results suggest that insurers exercise market power by price discriminating across consumers with various plan options, which is consistent with Dafny (2010). Interestingly, we elucidate that industry consolidation (in terms of PDP variety and market concentration) not only directly affects  beneficiaries'  program enrollment and OOP drug expenditures but  also indirectly affects consumers through impacting plan attributes.
+
+This paper contributes to the literature that examines the effects of Medicare Part D on older adults'  outcomes  related  to  prescription  drug  coverage.  Duggan  and  Morton  (2010)  find  that
+
+prescription drug use increased significantly among Medicare Part D enrollees, likely due to lower prices. Ketcham and Simon (2008) report that OOP costs were reduced significantly among seniors within the first year of the program. Engelhardt and Gruber (2011) show that most of the reductions in OOP costs accrued to a small proportion of the elderly who had the highest risk of spending. Overall, in a recent survey of 65 studies by Park and Martin (2017), they report Medicare Part D enrollees have decreased OOP costs and increased drug utilization, but coverage gaps limit the program's impact.
+
+Our work differs from the literature by providing a novel study on how industry consolidation in the Medicare Part D PDP market decreases beneficiaries' program enrollment and increases OOP drug expenditures. Importantly, our results suggest that the benefits of Medicare Part D are partially offset by industry consolidation. Previous studies argue that consumers make sub-optimal choices when they face a wide variety of plans (Abaluck & Gruber, 2011; Heiss et al., 2013; Kling et al., 2012; Zhou & Zhang, 2012), suggesting that plan consolidation in the Medicare Part D market (for example, through reducing the number of plans available) can improve consumer decision-making. Our results imply that, even up to the year 2019, policymakers still need to tradeoff such benefits with lower program enrollment and higher OOP drug expenditures delivered by the remaining plans.
+
+Our paper also contributes to the empirical literature on understanding the effects of industry (horizontal) consolidation in health insurance. Dafny et al. (2012)  use a proprietary dataset on employer-sponsored health plans between 1998 and 2006 to examine the 1998 merger between Aetna and Prudential. They find that premiums increase by 7 percent, and the insurer reduces payments to physicians by 3 percent. In a closer relationship to our work, Chorniy et al. (2020) examine 10 mergers in the Medicare Part D market from 2006 to 2012. They find premium increases when the merging insurers serve in the same Medicare region. However, the merger insurers can bargain for better drug access with the drug manufacturers for their plans. Plan consolidation leads to productive efficiency.
+
+Hill and Wagner (2021) find that an increase in HHI raises the premium only for markets with a higher concentration of market share. Our paper contributes to the literature by extending the analysis beyond market-level outcomes to individual-level outcomes. In undertaking this research, we have established  a  novel  relationship  between  industry  consolidation,  program  enrollment,  and  the prescription drug costs borne by consumers. This connection elucidates the direct impact of industry consolidation on consumer behavior and financial burden in the insurer market.
+
+The rest of this paper is organized as follows. Section 2 discusses industry background. Sections 3 and 4 present the data and model, respectively. Section 5 discusses the results. Section 6 concludes.
+
+2. Industry Background
+
+Medicare Part D is voluntary prescription drug coverage available to all Medicare beneficiaries. The program was enacted under the Medicare Modernization Act (MMA) of 2003 and went into effect on January 1, 2006, following a limited, transitional drug discount program that was offered in 20042005. Medicare beneficiaries can choose either stand-alone PDPs if they enroll in the Medicare Part A and B programs or a MAPD plan which is a Medicare Part C plan plus prescription drug coverage. Following existing studies, we treat stand-alone PDPs and MAPDs as two separate product markets and focus on the stand-alone PDP market.
+
+The MMA of 2003 and subsequent regulations established the basic Part D drug benefit design, beneficiary information requirements, and quality/access standards, as well as set up risk adjustment, risk-sharing, and reinsurance provisions (Hoadley, 2006). However, the law still allowed for substantial flexibility in plan design along characteristics likely to be relevant to consumers, such as the drug formulary and whether the plan includes a deductible or has cost-sharing that varies by drug category.
+
+Stand-alone PDPs are differentiated from each other in various dimensions. First, the premium is a consideration in determining plan choice because the enrollees pay a premium for specific benefits
+
+of a plan. Second, there are several plan characteristics that are important for plan choice. Figure 2 shows the benefit structure of a typical stand-alone PDP. In the year 2017 (our analysis period runs from 2007-2019), the standard benefit included an (approximately) $400 deductible and three coverage zones, which are initial coverage, coverage gap (which is called the doughnut hole) and catastrophic coverage. After the deductible is exhausted, the enrollee has a co-pay of 25% up to $3,700 in the first coverage period. Then, the enrollee enters a coverage gap, during which the enrollee pays 40-51%. The exact copay depends on the enhanced plan in which beneficiaries choose to enroll and brand name or generic drugs beneficiaries choose to use. Finally, as drug expenses reach $8,071, beneficiaries reach the catastrophic coverage threshold. After that point, they pay 5% of total drug costs.
+
+M&A activities have been a driving force shaping the competitive landscape of the Medicare Part D market. At the time of Medicare Part D's inception, 65 different organizations offered more than 1,400 plan options, with a typical state offering 40-45 plans provided by 15-20 organizations (Hoadley, 2006). Figure 3 depicts the nationwide market shares of top insurers providing Medicare Part D PDP plans. In 2007, United Health and Humana covered 20% and 17% of total enrollment, with the remaining divided among dozens of others. By 2019, the market had become more concentrated. CVS Health covered 21% of the total enrollment, followed by Humana (14 percent) and United Health (14 percent). The top three insurers had about half of the total enrollment. This industry consolidation has been attracting the concern of the Department of Justice (DOJ). Notably, in the CVS-Aetna merger in 2019, the DOJ reviewed the merger and approved it conditional on the divestiture of Aetna's Part D businesses to WellCare (US Department of Justice, 2018).
+
+Another driving force affecting  the competitive landscape of the  Medicare Part D market is regulatory policy. In particular, over the period 2011-19, CMS imposed the 'meaningful difference requirement' for stand-alone PDPs offered by the same insurers in the same region. CMS required Part D insurers that offer more than one plan per market to demonstrate meaningful differences
+
+between their plans, in terms of premiums, cost sharing, formulary design, or other benefits. Insurers were allowed to offer only one basic plan benefit design in a market and no more than two enhanced alternative plans in each market (CMS, 2018). The meaningful difference requirement aimed to reduce beneficiaries' confusion about their options and to improve the quality of plan choice. However, it forces insurers to consolidate their plans, which reduces beneficiaries' options and potentially reduces competition among insurers. Overall, then, both M&A activities and regulatory changes have led to the Medicare Part D market to become more concentrated.
+
+3. Data
+
+We utilize two datasets for our empirical analysis. First, we use detailed plan-level data from the CMS Landscape Files Data. It includes on average 1,429 stand-alone PDPs per year. These data span 12 years from 2007, the year after Medicare Part D was introduced, to 2019 and cover 50 states and 34 regions from CMS.  We employ this dataset to compute the two measures of competition at the market level. Second, we use individual-level data from the 2006-2018 waves of RAND HRS, which is a longitudinal survey of Americans over 50 years old and their spouses. About 20,000 people take part in this survey in each wave (every 2 years). We employ this dataset to examine program enrollment and OOP at the individual level.
+
+3.1. Plan-Level Data
+
+We construct two variables of interest from the CMS dataset. The first is the total number of PDPs per 10,000 senior residents in a market, where each market is defined at state level. We denote this variable as NPlan, which measures plan variety. The second variable is the HHI, which is computed across all insurers in each market. The HHI is defined as the sum of the squared market shares of each insurer multiplied by 10,000. The market shares of each insurer are determined by
+
+adding the enrollment of all plans offered by the same insurer in a market and dividing this number by the total enrollment of all insurers in the market. As a result, the HHI captures inter-insurer competition at the market level. HHI values of 0 indicate perfect competition, while index values of 10,000 indicate monopoly.
+
+Figure 4 depicts that the number of PDPs per 10,000 senior residents in a market decreases from 1.32 in 2007 to 0.41 in 2019. Similarly, the HHI in a market increases from the lowest point 1,717 in 2010 to 2,060 in 2019. It suggests higher concentration in the Medicare Part D PDP market over time. Further, we illustrate the heterogeneities in the number of plans offered and the HHI across markets and years. Figure 5 depicts the distribution of the number of PDPs and HHI across markets. The distribution of the number of PDPs offered per 10,000 senior residents is right skewed. The majority of markets have fewer than 1 PDP offered per 10,000 senior residents in a year, even though some markets can have more than 4 PDPs offered per 10,000 senior residents in a year. On average, the number of PDPs per 10,000 senior residents is about 0.4 (see Panel B of Table 1 ). In contrast, the distribution of HHI is more symmetric. It ranges from below 1,000 to almost 4,000. On average, the HHI is about 1,826 (see Panel B of Table 1 ). A majority of markets have HHI between 1500-2000. The merger guidelines issued by DOJ and FTC would consider those markets to be moderately concentrated.
+
+3.2. Individual-Level Data
+
+Individual-level data come from the restricted-use version of the Health and Retirement Study (HRS), 2006-2018 waves. The HRS is sponsored by the National Institute on Aging (grant number NIA U01AG009740) and is conducted by the University of Michigan (HRS, 2024). We create the analytic  sample  using  the following criteria: 1) we only keep  HRS  respondents over 65 years old because this age group is eligible for Medicare Part D; 2) we drop HRS respondents who report being
+
+disabled (when asked the HRS survey question about current work status); previous studies show that Medicare Part D does not affect disabled individuals' drug utilization (Nelson et al., 2014); 3) we exclude 9,550 respondents who changed their state of residence during our sample period; 4) we exclude 6,428 respondents who are dually eligible for Medicare and Medicaid; 5) we limit the sample to respondents residing in the mainland U.S.; and 6) we limit the sample to HRS respondents who have non-missing responses to survey questions related to this study. Also, we limit the sample to HRS respondents from the 2006-2018 biennial survey waves who were interviewed in the years 20172019 so we can merge their records to the market-level data which runs from 2007-2019. (Most HRS respondents are interviewed in 'even years', but we include those interviewed in 'odd years' as well.)
+
+Outcome Variables : We focus on the following questions in the HRS related to Medicare Part D program enrollment and drug expenditures:
+
+ 1. 'Are you enrolled in Medicare Part D, also known as the Medicare Prescription Drug Plan?' We use the answer to this question to construct two binary indicators of program enrollment: (a) enrolled in a PDP; and (2) enrolled in an MAPD. Figure A1 in Appendix illustrates the details of this variable construction.
+ 2. 'On average, about how much have you paid out-of-pocket (not including premiums) per month for these prescriptions?' We use the answer to this question to construct a continuous variable of OOP spending on prescription drugs.
+
+Panel A of Table 1 reports the descriptive statistics of our outcome variables. We have 32% of observations indicating that they are enrolled in a Medicare Part D stand-alone PDP, while 28% report enrollment in MAPD. The mean monthly OOP expenses on prescription drugs is $52. The large standard deviation for OOP expenses implies that there is a group of respondents who do not have
+
+OOP expenses, while there also is another group of respondents spending more than $200 per month on prescription drugs. We address this feature of the data in our empirical approach.
+
+Individual Characteristics : In the HRS, respondents answer questions about their demographics. Panel C  of Table  1 reports the descriptive statistics of individual characteristics of our sample respondents. About half of respondents are between 65 and 74, and the other half are 75 or older. Among our respondents, 43% are male, 85% are white and 12% are Black, and 35%, 33% and 13% have high school degrees, college degrees, and graduate degrees, respectively. Household incomes are about equally distributed in the categories of below 20K, 20-35K, 35-65K and above 65K. Arthritis and high blood pressure are the two most common chronic health problems (69% and 68%) of HRS respondents.
+
+We merge the market-level measures of competition to the HRS individual-level dataset with interview year and the use of the state identifier. Consequently, our working sample contains 42,741 observations from 12,943 individuals residing in 50 states over the period 2007-2019.
+
+4. Empirical Model
+
+This section outlines the empirical model, which is specified for respondent i living in market j in year t as follows:
+
+Yijt = α 1 NPlanjt + α 2 HHIjt + xit β + γ j + γ t + Trendjt + ε ijt (1)
+
+The outcome Yijt includes Medicare Part D stand-alone PDP enrollment, MAPD enrollment and OOP. The variables of interest are NPlanjt  and  HHIjt. We include a vector of demographic characteristics xit of individual i in year t (see Panel C, Table 1 ). We also include state fixed effects (FEs) γ j and year FEs γ t to control for unobserved heterogeneity and time variations in the outcome
+
+variables. Further, we include region-specific time trends Trendjt to control for unobserved trends in Medicare Part D program enrollment and OOP drug expenditures across states. Table A1 reports a robustness check with the inclusion of individual FEs.
+
+Since we include state and year FEs in Equation (1), the coefficients of NPlan and HHI are identified by variation within markets over time. For NPlan, this variation primarily comes from the entry and exit of PDPs from the market. For HHI, this variation comes from the entry and exit of PDPs from the market and/or changes in market share of continuing insurers.
+
+We employ distinct strategies to estimate Equation (1) because program enrollment and OOP drug  expenditures  have  different  distributional  properties.  For  stand-alone  PDP  and  MAPD enrollment, which are binary variables, we estimate Equation (1) as a linear probability model with OLS. For OOP, we follow Mullahy (1998) and estimate Equation (1) with a two-part model (TPM) because there is a mass of zeros for OOP. The first part is a probit model with the indicator 1{OOP >0}, while the second part is a generalized linear model (GLM) with gamma error distribution and a log link function. It is noteworthy that approximately 28% (11,984 out of 41,741) of the observations have zero monthly OOP drug expenditures. This suggests that a significant number of respondents either do not require any prescription drugs or have health insurance that completely covers their drug costs. The substantial proportion of zero OOP values supports the use of a TPM.
+
+5. Results
+
+We first discuss the main findings and then discuss a robustness check based on a causal inference approach.  Subsequently, we explore the heterogeneities in our results and the potential channels leading to our main results.
+
+5.1. Main Findings
+
+Table 2 presents the empirical results of Equation (1) for PDP enrollment, MAPD enrollment and OOP drug expenditures. The table presents the results from two different model specifications: Columns  1  and  2  report  the  outcomes  of  the  linear  probability  model  for  PDP  and  MAPD enrollments, while Columns 3 to 5 report the findings of the TPM for OOP drug expenditures.
+
+From Column 1, we note that the coefficient for NPlan is positive and significant, while Column 2 shows that the coefficient for NPlan is significant but negative. These results suggest that larger stand-alone PDP variety increases the likelihood of PDP enrollment but decreases the likelihood of MAPD enrollment. Specifically, consider a 10% increase in NPlan, computed from its mean value, which corresponds to an additional 0.042 plans per 10,000 senior residents. Such an increment associates with a 0.17 (= 0.042 * 0.042) percentage point rise in stand-alone PDP enrollment, equating to approximately 0.6% of the mean enrollment rate.
+
+Further, Columns 3 to 5 report the results from the TPM for OOP drug expenditures. Column 3 presents  the coefficients from the probit  model (the first part of the model) that estimates the probability of reporting any positive OOP drug expenditures. The lack of significant findings indicates that neither the stand-alone PDP variety nor HHI  are  driving  positive OOP drug  expenditures. Column 4 presents the coefficients from the second part, the GLM model (second part of the model) estimating the relationship among those who reported a positive OOP drug expenditure. The positive and significant coefficient for HHI in this column reveals that a rise in market concentration raises OOP for prescription drugs among the patients who incur positive OOP drug expenditures. Column 5 presents the average marginal effects from the combined first and second parts of the model. The coefficient for the HHI is positive and significant with respect to OOP drug expenditures. Here, a marginal 10% increase from the mean HHI, quantified at 182.6, is expected to result in an elevation
+
+of monthly OOP drug expenditures by $7.88 (= 43.169 / 1,000 * 182.6), an amount constituting 15% of its mean value.
+
+To interpret the economic significance of our results, we consider the following hypothetical scenario: presuming all other factors remain constant, if a respondent had relocated from a market characterized by a HHI around the 25th percentile across all years and markets (California in our dataset) to another market with an HHI around the 75th percentile (Ohio  in our dataset), their monthly OOP drug expenditures would have increased from $44.5 to $66, reflecting an increase of 48%. Conversely, holding all other factors constant, the effect of PDP variety on OOP costs is rather trivial. For instance, if an individual had moved from a market with NPlan around the 25th percentile (Pennsylvania in our dataset) to a market with an NPlan near the 75th percentile (Georgia in our dataset), their monthly OOP drug expenditures would have marginally increased from $51.7 to $52.2.
+
+Overall, our main results suggest that industry consolidation, as characterized by plan variety and concentration, exerts a measurable impact on beneficiaries' insurance enrollment  and OOP drug expenditures in Medicare Part D market.
+
+5.2. Robustness Checks
+
+Our identification relies on the  variation  in  industry consolidation being  uncorrelated with unobservable determinants of program enrollment and OOP drug expenditures (i.e. omitted variables bias). Since  our models include state FEs, such a correlation will  only exist if the unobservable determinants of program enrollment and OOP drug expenditures are time-varying. Nonetheless, since we also include region-specific linear time trends in our models, these unobservable determinants must vary nonlinearly over time at the state-level to generate a confounding correlation.
+
+5.2.1. Individual FEs
+
+To mitigate any biases stemming from unobservable determinants of program enrollment and OOP drug expenditures, we include individual FEs in our model and report the results in Table A1 in the Appendix. Encouragingly, our main results are robust to the inclusion of individual FEs.
+
+5.2.2. Entry & Exit of Insurers
+
+Our model utilizes the entry and exit of insurers for identifying variation. Such variation could coincide with, or be caused by, changes in unobserved preferences driving changes in insurance and drug use. To determine whether our estimates of the effect of industry consolidation are confounded by such a correlation, we estimate our model only relying on the entries and exits of insurers due to nationwide insurer mergers  occurring in overlapping markets.  Nationwide insurance  mergers are motivated to exercise market power in their overlapping markets and exploit cost synergy at the national level. Consequently, entries and exits of insurers driven by nationwide mergers are less likely to be driven by unobserved preferences for insurance and drug use in a particular market.
+
+We identify nationwide M&As during our time period by analyzing the year-over-year changes in the parent companies of PDPs and cross-referencing these data with publicly accessible information to confirm accuracy. Through this methodology, we identified 12 M&As among stand-alone PDP insurers  characterized  by  their  nationwide  scope,  indicating  that  both  the  acquiring  and  target organizations  engage  in  operations  spanning  multiple  markets.  This  subset  includes  significant transactions such as the mergers and acquisitions between CVS and Universal, and the notable acquisition of Aetna by CVS (list of the 12 national M&As is shown in Appendix Figure A2)
+
+To utilize these 12 national M&As in the analysis, first we count the total entries and exits of insurers that were NOT due to nationwide M&A for each state across years, and the total number of insurers for each state across years. Then, we compute the ratio of non-M&A entering and exiting insurers to total number of insurers for each state. The mean and median of such ratio are both 29%
+
+across states. In other words, on average, insurers entering and exiting a state not due to a nationwide M&A represent 29% of total insurers in that state. We define the states with substantial non-M&A entries and exits of insurers to be the states with that ratio above 30%. 2 We re-estimate the main model using a sub-sample that drops HRS respondents from states above the 30% threshold. These findings are reported in Table A2, and they are consistent with our main results.
+
+5.2.3. Causal Inference Approach
+
+In addition, we consider a quasi-natural experiment to generate plausibly exogenous variation in NPlan and HHI by employing the nationwide insurer mergers in the stand-alone PDP market, which generate a drop in plan  variety  and a rise in HHI  in the market. Again, the rationale for using nationwide insurer mergers in our context is that nationwide insurer mergers specifically are less likely to be driven by Medicare Part D enrollment and utilization in a particular local market. Therefore, nationwide insurer mergers provide exogenous variation in industry consolidation at the market-level that can be exploited to estimate the impact of industry consolidation on individual stand-alone PDP enrollment and OOP drug expenditures.
+
+Specifically, we employ a control function approach following Wooldridge (2015) to estimate the casual relationship between industry consolidation and beneficiaries' PDP enrollment as well as their OOP drug expenditures. Since our model of OOP is nonlinear, the control function approach has been shown to be efficient relative to two-stage least squares, despite both approaches employing IV (Guo and Small 2016). Since we have two potentially endogenous explanatory variables, i.e. NPlan and HHI, we need two IVs to identify the effects of those two variables on the outcomes of interest. For NPlan, we employ a variable Duplicate as its IV. It is defined as the number of duplicate PDPs per 10,000 senior residents for each market j in year t . To elaborate the computation of Duplicatejt ,
+
+consider the following illustrative procedure: initially, a K-means clustering analysis is conducted, relying on plan characteristics such as plan type and subsidization status, to categorize similar plans within a market for each year. For instance, if insurer A offers five PDPs in the state of New York in the year 2010, and two of those plans are classified within the same cluster, then these two are deemed similar. Consequently, one of the two clustered plans is designated as a 'duplicate' offered by insurer A in New York for the year 2010. Subsequently, we aggregate the count of all such duplicated plans provided by various insurers in New York for 2010 and normalize this figure by the senior resident population (scaled to per 10,000 individuals) to determine the 'Duplicate' metric for New York in the referenced year. In practices, the first stage model for NPlan is specified as follows:
+
+NPlanjt = β 1 Duplicatejt-1 + xit β 2 + γ j + γ t  + γ jt + ε ijt,NPlan (2A)
+
+For HHI, we follow Dafny et al. (2012) and Hill and Wagner (2021) to use simulated delta HHI (ΔSimHHI) to construct the IV. The first stage model for HHI is specified as follows:
+
+HHIjt = β 1 Δ SimHHIjt-1 + xit β 2 + γ j + γ t  + γ jt + ε ijt,HHI (2B)
+
+where
+
+Δ SimHHIj = (Share1j + Share2j) 2 - (Share1j 2 + Share2j 2 ) = 2 x Share1j x Share2j
+
+Share1 and Share2 are the market shares of two insurers involved in a merger. Like the other IV, Δ SimHHI is computed with the observations before merger. Intuitively, Δ SimHHI is the predicted change in HHI due to the merger. It is worth noting that Δ SimHHI shows positive value in the market in the year of a merger occurred, and zero otherwise. We compute Δ SimHHI based on the identified nationwide M&As mentioned above. Dafny et al. (2012) and Hill and Wagner (2021) employ a setting with one merger, but, in our setting, it is possible that there was more than one merger in a
+
+market within the same year. For this reason, we add up the simulated delta HHI calculated for each merger to obtain Δ SimHHI for each market in that year. 3
+
+Panel A of Table 3 reports  the  results of the first stage regression for  our  control function estimation. The coefficient corresponding to the lagged variable Duplicatejt-1 is positive and significant in Equation (2A), indicating that a higher incidence of plan duplication in the previous period is predictive of a larger PDP variety in the current period. The coefficient for Δ SimHHIjt-1 is positive and significant in Equation (2B), implying that mergers in the preceding period led to an increased HHI in the subsequent period. Further, the F-statistics exceed the thresholds traditionally associated with weak instrument concerns (Stock & Yogo, 2005), which suggests that our IV are relevant and valid for our model.
+
+In the second-stage model of our control function estimation, we include the residuals from firststage model to control for endogeneity. 4 Specifically, we estimate the following model:
+
+Yijt = α 1 NPlanjt + α 2 HHIjt + xit β + γ j + γ t + Trendjt + 𝝋𝝋𝑵𝑵𝑵𝑵𝑵𝑵𝑵𝑵𝑵𝑵𝜺𝜺𝒊𝒊𝒊𝒊𝒊𝒊 , 𝑵𝑵𝑵𝑵𝑵𝑵𝑵𝑵𝑵𝑵 � + 𝝋𝝋𝑯𝑯𝑯𝑯𝑯𝑯𝜺𝜺𝒊𝒊𝒊𝒊𝒊𝒊 , 𝑯𝑯𝑯𝑯𝑯𝑯 � + eijt (2C)
+
+Panel B of Table 3 reports the control function estimates of the causal relationship of NPlan and HHI on individual stand-alone PDP enrollment and OOP drug expenditures using Equation (2C). Columns 1 and 2 report that markets with a larger  PDP  variety  exhibit  higher stand-alone  PDP enrollment rate and lower MAPD plan enrollment rate, respectively. These results are consistent with our findings delineated in Table 2 . Interestingly, the coefficients estimated from the control function estimations for NPlan are larger in magnitude than those obtained from the OLS estimations. This
+
+phenomenon is consistent with the theoretical exposition by Imbens and Angrist (1994), positing that IV estimates may be elevated due to their derivation from a specific subpopulation that is influenced by the instrument in question. In this context, the control function estimate reflects the impact of
+
+NPlan exclusively for markets that exhibit variation in the number of duplicated PDPs, whereas the OLS estimate captures the average change in PDP participation across markets for each additional PDP option. Columns 3 to 5 indicate that the coefficients of HHI have the same sign as those reported in our main results. However, the portion of HHI variation stemming from M&As among insurers does not estimate them at conventional significance levels.
+
+5.3. Heterogeneities
+
+This section performs sub-sample analyses to examine the sources of variation that generate the main findings reported in Table 2 . Specifically, we estimate Equation (1) by dividing the sample according to different criteria: age (under 75 v. equal to or above 75), education (below or equal to high school graduate v. college or above), race (Black v. white), and number of chronic diseases (below 3 v. 3 and above).
+
+We report the results in Table 4 . Columns 1 and 2 report the positive effects of PDP variety on stand-alone PDP enrollment and the negative effects of PDP variety on MAPD  enrollment are stronger for the sub-samples of individuals with age  under 75,  with  a college degree or above, identified as white and with fewer than three chronic conditions. Similarly, the same sub-samples of individuals exhibit a stronger positive response in their change in OOP drug expenditures when HHI increases, see Column 5.
+
+These subpopulations possibly possess greater financial resources and are, therefore, more able to afford desirable plans. Consequently, these well-resourced groups demonstrate heightened propensity to switch out from MAPD plans and enroll in stand-alone PDPs when a larger variety of PDPs is
+
+available. Further, these subpopulations exhibit a greater willingness to pay for their drug OOP in the face of a more concentrated market for stand-alone PDPs. Potentially, the quality of stand-alone PDP deteriorate  as  market  concentration  increases,  and  those  subpopulations  pay  more  OOP  drug expenditures to maintain their medical needs.
+
+5.4. Potential Channels
+
+This section explores the potential channels through which stand-alone PDP variety and market concentration  affect  PDP/MAPD  enrollment  and  OOP  drug  expenditures.  We  aggregate characteristics across PDPs to construct three plan characteristics at the  market level, namely (1) average premium in the market,  (2)  percentage of PDPs with full subsidy  in the market, and (3) percentage of enhanced PDPs in the market. The descriptive statistics of these three variables are reported in Panel B of Table 1 . In our sample, the average premium is $51 per month, the average percent of PDPs with full subsidy is 26% and the average percent of enhanced plans is 51%.
+
+Table 5 reports a market-level regression of those three plan attributes on NPlan and HHI. The coefficients of NPlan are positive and significant in all three columns. These findings suggest that a market characterized by lower PDP variety associates with lower average premiums, lower provision of PDPs with full subsidies, and lower provision of PDPs with enhanced options. This observation aligns with the theoretical premise that insurers may diminish both plan differentiation and quality in markets where there is a limited number of PDPs. Further, the coefficients of HHI are positive and significant in Columns 1 and 3 but negative and significant in Column 2. It suggests that when the PDP market becomes more concentrated, it increases average premiums, potentially through increases in the availability of enhanced plans and decreases in the availability of plans with full subsidy.
+
+Subsequently, going back to an individual-level regression, we explore the extent to which three market-level measures of plan attributes-average premium (relative to HRS respondent's household
+
+income) to measure affordability), 5 the percentage of PDPs offering full subsidies and the percentage of PDPs offering enhanced options-mediate the impact of industry consolidation on stand-alone PDP enrollment and OOP  drug expenditures. To validate the robustness of our findings, we incorporate these plan characteristics both individually and collectively into Equation (1), with the results presented in Table 6 . To show the robustness of our results, we include the plan attributes one-by-one and find the results are robust across specifications. Thus, we focus the results presented in Column 5, where all three plan attributes are included into Equation (1) concurrently.
+
+Panels A and B of Table 6 present that the coefficient of NPlan remains relatively stable after the introduction of the premium-to-income ratio, the percentage of plans offering a full subsidy, and the percentage of enhanced plans into the model of stand-alone PDP enrollment. Panel A reports that the coefficients of  premium-to-income ratio, the percentage of plans with full subsidy and the percentage of enhanced plans are positive and significant, which corroborate findings from an earlier study (Levy & Weir, 2010). In contrast, Panel B reports that the coefficients of premium-to-income ratio, the percentage of plans with full subsidy and the percentage of enhanced plans are negative and significant.
+
+Together, these results suggest that as PDP variety increases, it promotes PDP enrollment through various channels. A larger PDP variety associates with the higher availability of higher quality plans (proxied by a higher premium-to-income ratio), of plans offering full subsidies and of enhanced plans. These three changes in plan attributes driven by a larger PDP variety all promote beneficiaries switching away from MAPD enrollment and increasing stand-alone PDP enrollment. Further, a larger PDP variety has a direct effect of driving beneficiaries from MAPDs to stand-alone PDPs as the coefficient of NPlan remain significant after including those three plan attributes. With a larger stand-
+
+alone PDP variety, beneficiaries are likely to find PDPs that match their specific needs and preferences in terms of drug coverage, cost-sharing, and pharmacy networks. This personalized fit can make PDPs more attractive than the bundled offerings of MAPD plans, especially if they are satisfied with their existing Medicare Part A and B coverage.
+
+Panel C of Table 6 reports that the coefficient of HHI only decreases by about 7% after the introduction of the premium-to-income ratio, the percentage of plans offering a full subsidy, and the percentage of enhanced plans into the model of OOP drug expenditures. 6 This observation suggests that  market concentration affects OOP drug expenditures partly through impacting these plan attributes. The coefficients of percentage of full subsidy plan and percentage of enhance plans are positive and significant. One plausible interpretation is that plans with a full subsidy disproportionately attract beneficiaries with a greater need for medical services and encourage their drug use and OOP drug expenditures. Further, the enhanced plans typically offering broader drug coverage, including a more  extensive  array  of  brand-name  pharmaceuticals  that  are  priced  higher  than  their  generic counterparts. Consequently, OOP drug expenditures can be elevated if beneficiaries under enhanced plans prefer or require brand-name drugs.
+
+Together, these results suggest that as HHI increases, it raises OOP drug expenditures through various channels. A more concentrated PDP market associates with the lower availability of plans offering full subsidies, but a higher availability of enhanced plans. These two changes in plan attributes driven by an increased market concentrated promote beneficiaries spending more on drug switching to and continuing with the enhanced plans. Further, an increased market concentration has a direct effect on OOP drug expenditures as the coefficient of HHI remain significant after including those three plan attributes. As the market becomes more concentrated, insurers may deteriorate their PDPs
+
+in  terms  of  drug  coverage  and  cost-sharing,  which  may  heighten  their  enrollees'  OOP  drug expenditures.
+
+6. Conclusion
+
+This study investigates the impacts of industry consolidation in the Medicare Part D stand-alone PDP market, focusing on its effects on beneficiaries' program enrollment and OOP drug expenditures. Our findings based on plan-level data from the CMS and individual-level data from the HRS indicate that reduced PDP variety leads to a lower PDP enrollment and a higher MAPD enrollment, while increased market concentration increases OOP drug expenditures among beneficiaries. Our results are robust to the inclusion of individual FEs, the potential confounding impacts of insurer entry and exit,  and  the use of an alternative identification  strategy that based on duplicated PDP plans and nationwide M&As as a quasi-experimental design. Additionally, the study reveals that younger, more educated, white and healthier individuals are more responsive to PDP variety to switch away from MAPD plan to stand-alone  PDPs and  are more responsive to elevated market concentration to increase OOP drug expenditures. Finally, our results elucidate that industry consolidation in terms of PDP variety and market concentration not only affect beneficiaries' program enrollment and OOP drug expenditures directly but also through impacting plan attributes.
+
+Our study highlights the policy implications that industry consolidation in the Medicare Part D market may hinder program enrollment and heighten drug expenditures. Importantly, the benefits delivered  by  Medicare  Part  D  are  partially  counterbalanced  by  the  ramifications  of  industry consolidation. While extant literature posits that plan consolidation in the Medicare Part D market might facilitate improved decision-making among consumers, our results underscore a critical policy consideration. Policymakers need to navigate a balance between the potential benefits of enhanced decision-making and the drawbacks of reduced enrollment of Part D program and increased financial
+
+burdens imposed on beneficiaries. This insight is pivotal for informing policy aimed at optimizing the evolving Medicare Part D market.
+
+References
+
+Abaluck, J., & Gruber, J. (2011). Choice Inconsistencies among the Elderly: Evidence from Plan Choice in the Medicare Part D Program. American Economic Review , 101 (4), 1180-1210.
+
+Anderson, G. F., Hussey, P., & Petrosyan, V. (2019). It's still the prices, stupid: why the US spends so much on health care, and a tribute to Uwe Reinhardt. Health Affairs , 38(1), 87-95.
+
+Chorniy, A., Miller, D., & Tang, T. (2020). Mergers in Medicare Part D: Assessing market power, cost efficiencies, and bargaining power. International Journal of Industrial Organization , 68 , 102548.
+
+Centers for Medicare & Medicaid Services (CMS). (2018). CMS Finalizes Policy Changes and Updates for Medicare Advantage and the Prescription Drug Benefit Program for Contract Year 2019 (CMS-4182-F). Available at: https://www.cms.gov/newsroom/fact-sheets/cms-finalizes-policychanges-and-updates-medicare-advantage-and-prescription-drug-benefit-program
+
+Dafny, L. (2010) Are Health Insurance Markets Competitive? American. Economic Review , 100: 13991431.
+
+Dafny, L. (2021) How Health Care Consolidation Is Contributing to Higher Prices and Spending, and Reforms That Could Bolster Antitrust Enforcement and Preserve and Promote Competition in Health Care Markets. Testimony to the U.S. House Committee on the Judiciary Subcommittee on Antitrust, Commercial and Administrative Law.
+
+Dafny,  L.,  Duggan,  M.,  &  Ramanarayanan,  S.  (2012).  Paying  a  Premium  on  Your  Premium? Consolidation in the US Health Insurance Industry. American Economic Review , 102 (2), 1161-1185. Dafny, L., Gruber, J., & Ody, C. (2015). More insurers lower premiums: Evidence from initial pricing in the health insurance marketplaces. American Journal of Health Economics , 1(1), 53-81.
+
+Damberg, C.L. (May 17, 2023). Health Care Consolidation: The Changing Landscape of the U.S. Health Care System. Testimony Before the Committee on Ways and Means Subcommittee on Health, United States House of Representatives. Available at:
+
+https://www.rand.org/content/dam/rand/pubs/testimonies/CTA2700/CTA2770-
+
+1/RAND\_CTA2770-1.pdf. Accessed 2/27/24.
+
+Duggan, M., & Morton, F. S. (2010). The Effect of Medicare Part D on Pharmaceutical Prices and Utilization. American Economic Review , 100 (1), 590-607.
+
+Engelhardt, G. V., & Gruber, J. (2011). Medicare Part D and the Financial Protection of the Elderly. American Economic Journal: Economic Policy , 3 (4), 77-102.
+
+Fulton, B. D. (2017). Health care market concentration trends in the United States: evidence and policy responses. Health Affairs , 36(9), 1530-1538.
+
+Guo, Z., & Small, D. S. (2016). Control function instrumental variable estimation of nonlinear causal effect models. The Journal of Machine Learning Research , 17 (1), 3448-3482.
+
+Gunja, M.Z., Gumas, E.D. & Williams, R.D. (January 31, 2023). U.S. Health Care from a Global Perspective, 2022: Accelerating Spending, Worsening Outcomes, https://www.commonwealthfund.org/publications/issue-briefs/2023/jan/us-health-careglobal-perspective-2022.
+
+Health and Retirement Study, (Cross-Wave Geographic Information (State) [1992-2018] (v8.2, Early)) restricted dataset. Produced and distributed by the University of Michigan with funding from the National Institute on Aging (grant number NIA U01AG009740). Ann Arbor, MI, (2024).
+
+Hartman, M., Martin, A.B., Whittle, L. & Catlin, A. (2023). National health care spending in 2022: Growth similar to prepandemic rates.  Health Affairs, 43(1), 6-17.
+
+Heiss, F., Leive, A., McFadden, D., & Winter, J. (2013). Plan selection in Medicare Part D: Evidence from administrative data. Journal of Health Economics , 32 (6), 1325-1344.
+
+Hill, N., & Wagner, M. (2021). Heterogeneous effects of consolidation on premiums in Medicare Part D. Journal of Health Economics , 80 , 102521.
+
+Ho, K. & Lee, R.S. (March 21, 2017). Insurer Competition in Health Care Markets. Econometrica , 85(2): 379-417.
+
+Hoadley, J. (2006). Medicare's New Adventure: The Part D Drug Benefit .
+
+Imbens, G. W., & Angrist, J. D. (1994). Identification and Estimation of Local Average Treatment Effects. Econometrica , 62 (2), 467-475.
+
+Kaiser Family Foundation (KFF), (October 18, 2023a) 2023 Employer Health Benefits Survey.
+
+Available at: https://www.kff.org/report-section/ehbs-2023-summary-of-findings/
+
+Kaiser  Family  Foundation  (KFF),  (Oct.  17,  2023b).  'An  Overview  of  the  Medicare  Part  D Prescription Drug  Benefit,' https://www.kff.org/medicare/fact-sheet/an-overview-of-themedicare-part-d-prescription-drug-benefit/
+
+Keisler-Starkey, K., Bunch, L.N. & Lindstrom, R.A. (September 2023). Health Insurance Coverage in the United States: 2022 Available at: https://www.census.gov/content/dam/Census/library/publications/2023/demo/p60-281.pdf Ketcham, J. D., & Simon, K. I. (2008). Medicare Part D's Effects on Elderly Patients' Drug Costs and Utilization. American Journal of Managed Care , 14 (11), 10.
+
+Kling, J. R., Mullainathan, S., Shafir, E., Vermeulen, L. C., & Wrobel, M. V. (2012). Comparison friction: Experimental evidence from medicare drug plans. The Quarterly Journal of Economics , 127 (1), 199-235.
+
+Levy, H., & Weir, D. R. (2010). Take-up of Medicare Part D: Results from the Health and Retirement Study. The Journals of Gerontology. Series B, Psychological Sciences and Social Sciences , 65 (4), 492-501.
+
+Melnick, G. A., Shen, Y. C., & Wu, V. Y. (2011). The increased concentration of health plan markets can benefit consumers through lower hospital prices. Health Affairs, 30(9), 1728-1733.
+
+Mullahy, J. (1998). Much ado about two: Reconsidering retransformation and the two-part model in health econometrics. Journal of Health Economics , 17 (3), 247-281.
+
+Nelson, R. E., Nelson, S. L., Huttner, B., & Gundlapalli, A. (2014). The effect of Medicare Part D on health care utilization for non-elderly Medicare recipients with disabilities. Disability and Health Journal , 7 (1), 64-69.
+
+Park, Y. J., & Martin, E. G. (2017). Medicare Part D's Effects on Drug Utilization and Out-of-Pocket Costs: A Systematic Review. Health Services Research , 52 (5), 1685-1728.
+
+Petrin, A., & Train, K. (2010). A control function approach to endogeneity in consumer choice models. Journal of Marketing Research , 47 (1), 3-13.
+
+RAND (2022). Environmental Scan on Consolidation Trends and Impacts in Health Care Markets. Scheffler,  R.  M.,  &  Arnold,  D.  R.  (2017).  Insurer  market  power  lowers  prices  in  numerous concentrated provider markets. Health Affairs , 36(9), 1539-1546.
+
+Scheffler, R. M., Arnold, D. R., Fulton, B. D., & Glied, S. A. (2016). Differing impacts of market concentration on Affordable Care Act Marketplace premiums. Health Affairs , 35 (5), 880-888.
+
+Stock, J. H., & Yogo, M. (2005). Testing for Weak Instruments in Linear IV Regression. Identification and Inference for Econometric Models, 2005, p.80-108 .
+
+Telesford, I., Wager, E., Amin, K. & Cox, C. (October 23, 2023). How does the quality of the U.S. health system compare to other countries? Peterson-KFF Health System Tracker, Available at: https://www.healthsystemtracker.org/chart-collection/quality-u-s-healthcare-system-comparecountries/. Accessed 2/27/24.
+
+Trish, E. E., & Herring, B. J. (2015). How do health insurer market concentration and bargaining power with hospitals affect health insurance premiums?. Journal of Health Economics , 42, 104-114.
+
+US Department of Justice. (Press release, October 10, 2018). Justice Department Requires CVS and Aetna to Divest Aetna's Medicare Individual Part D Prescription Drug Plan Business to Proceed
+
+with Merger. Available at: https://www.justice.gov/opa/pr/justice-department-requires-cvs-andaetna-divest-aetna-s-medicare-individual-part-d.
+
+Wooldridge, J. M. (2015). Control function methods in applied econometrics. Journal of Human Resources , 50 (2), 420-445.
+
+Zhou, C., & Zhang, Y. (2012). The Vast Majority Of Medicare Part D Beneficiaries Still Don't Choose The Cheapest Plans That Meet Their Medication Needs. Health Affairs , 31 (10), 2259-2265.
+
+<missing-text>
+<missing-text>
+Source: CMS landscape files; CMS Monthly Enrollment by Plan files
+
+<missing-text>
+Notes: We show the benefit structure of Medicare Part D as of 2017. At this time, beneficiaries still needed to pay additional copayments within the donut hole; thus, we can see that the bottom line has a higher slope. After 2017, the slope flattens out due to the Affordable Care Act's closing of the donut hole. Source: https://q1medicare.com/PartDThe-2017-Medicare-Part-D-Outlook.php.
+
+<missing-text>
+Source: CMS landscape files
+
+<missing-text>
+<missing-text>
+Source: CMS landscape files; CMS Monthly Enrollment by Plan files
+
+<missing-text>
+1000
+
+2000
+
+3000
+
+4000
+
+Source: CMS landscape files; CMS Monthly Enrollment by Plan files
+
+<missing-text>
+Notes: The sample includes 2007-2019 data from the 2006-2018 HRS waves. The unit of observation is an individual-year combination. All even years contribute 90% of observations (i.e. each even year contributes about 15% of observations), whereas all odd years contribute the remaining 10% of observations.
+
+<missing-text>
+Notes: The sample period covers 2007-2019. The unit of observation is an individual-year combination. HHI is rescaled (divided by 1,000) to lie between 0 and 4. NPlan indicates the total number of PDPs per 10,000 senior residents in a market. The individual-level control variables are listed in Panel C of Table 1. Columns 3-5 show the results of the twopart model of OOP. Robust standard errors in parentheses. Significance *p<10%; **p<5%; ***p<1%.
+
+<missing-text>
+<missing-text>
+Notes: The unit of observation is an individual-year combination. Robust standard errors in parentheses. Significance *p<10%; **p<5%; ***p<1%. Panel A: HHI and ∆SimHHI are rescaled (divided by 1,000) to lie between 0 and 4. Panel B: The residuals from first stage, i.e. Column 1 and 2 in Panel A, are included in the second-stage model. The individuallevel control variables are listed in Panel C of Table 1. Column 3-5 show the results of two-part model of OOP.
+
+<missing-text>
+Note: Each panel represents two separate regressions for two sub-samples. The unit of observation is an individual-year combination. HHI is rescaled (divided by 1,000) to lie between 0 and 4. The individual-level control variables are listed in Panel C of Table 1. Robust standard errors in parentheses. Significance *p<10%; **p<5%; ***p<1%.
+
+<missing-text>
+Note: The sample period covers 2007-2019. The unit of observation is a market-year combination. HHI is rescaled (divided by 1,000) to lie between 0 and 4. Robust standard errors in parentheses. Significance *p<10%; **p<5%; ***p<1%.
+
+<missing-text>
+Notes: This table reports the results of Equation 1. The unit of observation is an individual-year combination. HHI is rescaled (divided by 1,000) to lie between 0 and 4. The individual-level control variables are listed in Panel C of Table 1. Robust standard errors in parentheses. Significance *p<10%; **p<5%; ***p<1%.
+
+Appendix
+
+<missing-text>
+Notes: Our analytic samples excludes dual eligibles (Medicare plus Medicaid beneficiaries).
+
+<missing-text>
+<missing-text>
+Notes: The sample period covers 2007-2019. The unit of observation is an individual-year combination. HHI is rescaled (divided by 1,000) to lie between 0 and 4. The individual-level time-varying control variables are marital status, age, income, chronic health conditions, and overall health rating. Column 3  show the results of two-part model of OOP. Robust standard errors in parentheses. Significance *p<10%; **p<5%; ***p<1%.
+
+<missing-text>
+Notes: The sample period covers 2007-2019. The unit of observation is an individual-year combination. HHI is rescaled (divided by 1,000) to lie between 0 and 4. NPlan indicates the total number of PDPs per 10,000 senior residents in a market. The individual-level control variables are listed in Panel C of Table 1. Column 3-5 show the results of the twopart model of OOP. See Section 5.2.2 for the details of sample selection. Robust standard errors in parentheses. Significance *p<10%; **p<5%; ***p<1%.
+
+<missing-text>
