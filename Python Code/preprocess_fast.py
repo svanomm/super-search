@@ -17,7 +17,7 @@ def setup_chunker(_chunk_size=256, _chunk_overlap=64):
         end = _chunk_size-1
 
         while end < len(words):
-            chunk = words[start:end]
+            chunk = ' '.join(words[start:end])
             chunks.append(chunk)
 
             start = end - _chunk_overlap + 1
@@ -25,7 +25,7 @@ def setup_chunker(_chunk_size=256, _chunk_overlap=64):
         
         # make sure the last chunk has all the remaining words
         if end < len(words) - 1:
-            chunks.append(words[end:])
+            chunks.append(' '.join(words[end:]))
 
         return(chunks)
 
@@ -69,6 +69,7 @@ def preprocess(text):
         text = text.replace(f' {word_upper} ', ' ')
 
     text = text.replace('  ', ' ').replace('  ', ' ').replace('  ', ' ')
+    text = text.replace(' .', '.')
     text = text.strip()
     return(text)
 
