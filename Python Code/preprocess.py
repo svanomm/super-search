@@ -94,10 +94,6 @@ def prepare_PDF(in_path, _chunk_size=256, _chunk_overlap=64, _min_sentences_per_
     # Organize chunks and processed chunks into a dictionary
     chunk_data = {
         'raw_chunk': chunks
-        , 'processed_chunk': []
+        , 'processed_chunk': [preprocess(chunk) for chunk in chunks]
     }
-
-    for chunk in chunks:
-        chunk_data['processed_chunk'].append(preprocess(chunk))
-
     return(chunk_data)
