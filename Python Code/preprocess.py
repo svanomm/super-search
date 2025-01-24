@@ -95,5 +95,7 @@ def prepare_PDF(in_path, _chunk_size=256, _chunk_overlap=64, _min_sentences_per_
     chunk_data = {
         'raw_chunk': [chunk.text for chunk in chunks]
         , 'processed_chunk': [preprocess(chunk.text) for chunk in chunks]
+        , 'file_path': [in_path for chunk in chunks]
     }
+
     return(chunk_data)
