@@ -56,6 +56,7 @@ stop_words = [
 # Drop words: other words/symbols that should be removed
 drop_words = [
     '@','&',"\n","\r","©", "\t","®","ø","•","◦","¿","¡","#","^","&","`","~",";",":"
+    ,'_','|', '.','*','`'
     , "NBER WORKING PAPER SERIES"
     , "NATIONAL BUREAU OF ECONOMIC RESEARCH"
     , "National Bureau of Economic Research"
@@ -76,7 +77,9 @@ def preprocess(text):
         text = text.replace(f' {word} ', ' ')
         text = text.replace(f' {word_upper} ', ' ')
 
-    text = text.replace('  ', ' ').replace('  ', ' ').replace('  ', ' ')
+    # Removing double marks
+    for i in [' ', '.', ',', '!', '?']:
+        text = text.replace(f'{i}{i}', f'{i}')
     text = text.replace(' .', '.')
     text = text.strip()
     return(text)
