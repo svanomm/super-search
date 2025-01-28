@@ -13,23 +13,23 @@ def setup_chunker(_chunk_size=256, _chunk_overlap=64):
         _chunk_overlap = round(_chunk_size / 2)
         print(f"Warning: chunk overlap too large, setting to {_chunk_overlap}.")
 
-    def chunker(text):
+    def chunker(text, chunk_size = _chunk_size, chunk_overlap = _chunk_overlap):
         # Split text into words
         words = text.split(' ')
         chunks = []
 
-        if _chunk_size > len(words):
-            _chunk_size = len(words)
+        if chunk_size > len(words):
+            chunk_size = len(words)
 
         start = 0
-        end = _chunk_size-1
+        end = chunk_size-1
 
         while end < len(words):
             chunk = ' '.join(words[start:end])
             chunks.append(chunk)
 
-            start = end - _chunk_overlap + 1
-            end = end + _chunk_overlap
+            start = end - chunk_overlap + 1
+            end = end + chunk_overlap
         
         # make sure the last chunk has all the remaining words
         if end < len(words) - 1:
@@ -124,7 +124,7 @@ def prepare_text(in_path, _chunk_size=256, _chunk_overlap=64):
             c+=1
     assert c>0, "This is not a valid text file. Use a different function."
     
-    doc = pymupdf.open(in_path)
+    doc = pymupdf.open(in_path, filetype='txt')
 
     # combine all pages into one list
     paper = []
