@@ -1,7 +1,7 @@
 from sentence_transformers import SentenceTransformer
 from tqdm import tqdm
 
-import os, sys, glob, pickle, json
+import os, sys, glob, pickle, json, lzma
 import pandas as pd
 import numpy as np
 import pynndescent as nn
@@ -12,15 +12,11 @@ from preprocess import prepare_PDF, prepare_text
 
 def prepare_filelist(filepath, allowed_text_types = ['.txt', '.r', '.do', '.py', '.sas', '.sql', '.vba']):
     files = glob.glob(f"{filepath}/**/*", recursive=True)
-    
     pdfs = [file for file in files if file.lower().endswith('.pdf')]
-    
     t = []
     for i in allowed_text_types:
         t.append([file for file in files if file.lower().endswith(i)])
-    
     texts = [ts for tss in t for ts in tss] # flatten the list of lists
-    
     return {'pdfs': pdfs, 'texts': texts}
 
 def prepare_directory(file_path
@@ -75,7 +71,7 @@ def prepare_directory(file_path
 
     assert len(full_dict['raw_chunk']) > 0, "Found no files to analyze."
 
-    with open(f'../{backup_file}.pickle', 'wb') as f:
+    with lzma.open(f'../{backup_file}.pickle', 'wb') as f:
         pickle.dump(full_dict, f)
 
     return(full_dict)
@@ -87,7 +83,6 @@ def prepare_directory(file_path
 def create_database(file_path
                     , model_name = "sentence-transformers/static-retrieval-mrl-en-v1"
                     , truncated_dimensions = 1024
-                    , backup_file = "chunking_backup"
                     , allowed_text_types = ['.txt', '.r', '.do', '.py', '.sas', '.sql', '.vba']
                     , save_results = True
                     , chunk_size=256, chunk_overlap=64
@@ -101,7 +96,7 @@ def create_database(file_path
     
     # Prepare the directory
     print("Importing and processing files...")
-    full_dict = prepare_directory(file_path, backup_file, allowed_text_types, _chunk_overlap=chunk_overlap, _chunk_size=chunk_size)
+    full_dict = prepare_directory(file_path, backup_file, allowed_text_types, chunk_overlap=chunk_overlap, chunk_size=chunk_size)
 
     # Encode the chunks
     print("Encoding the text...")
@@ -113,12 +108,18 @@ def create_database(file_path
     index = nn.NNDescent(vecs)
     index.prepare() # preloads the operations so that future uses are faster
 
-    with open('../full_database.pickle', 'wb') as f:
-        pickle.dump(full_dict, f)
+    # don't need to save the processed text
+    full_dict_small = {
+        'raw_chunk'  : full_dict['raw_chunk']
+        , 'file_path': full_dict['file_path']
+        , 'vector'   : full_dict['vector']
+    }
+    with lzma.open('../full_database.pickle', 'wb') as f:
+        pickle.dump(full_dict_small, f)
         print("Saved the full database to ../full_database.pickle")
 
     # Pickle the nn data
-    with open('../nn_database.pickle', 'wb') as f:
+    with lzma.open('../nn_database.pickle', 'wb') as f:
         pickle.dump(index, f)
         print("Saved the NN data to ../nn_database.pickle")
 
