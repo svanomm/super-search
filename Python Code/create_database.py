@@ -1,7 +1,7 @@
 from sentence_transformers import SentenceTransformer
 from tqdm import tqdm
 
-import os, sys, glob, pickle, json, lzma
+import os, sys, glob, pickle, json, lzma, time
 import pandas as pd
 import numpy as np
 import pynndescent as nn
@@ -82,6 +82,7 @@ def prepare_directory(file_path
 
 def create_database(file_path
                     , model_name = "sentence-transformers/static-retrieval-mrl-en-v1"
+                    , backup_file = "chunking_backup"
                     , truncated_dimensions = 1024
                     , allowed_text_types = ['.txt', '.r', '.do', '.py', '.sas', '.sql', '.vba']
                     , save_results = True
@@ -96,17 +97,26 @@ def create_database(file_path
     
     # Prepare the directory
     print("Importing and processing files...")
+    t0 = time.time()
     full_dict = prepare_directory(file_path, backup_file, allowed_text_types, chunk_overlap=chunk_overlap, chunk_size=chunk_size)
+    t = round(time.time() - t0)
+    print(f"Done. Took {t} seconds.")
 
     # Encode the chunks
     print("Encoding the text...")
+    t0 = time.time()
     vecs = model.encode(full_dict['processed_chunk'])
     full_dict['vector'] = [i for i in np.unstack(vecs)]
+    t = round(time.time() - t0)
+    print(f"Done. Took {t} seconds.")
     
     # Create the nearest-neighbor index
     print("Creating the nearest-neighbor index...")
+    t0 = time.time()
     index = nn.NNDescent(vecs)
     index.prepare() # preloads the operations so that future uses are faster
+    t = round(time.time() - t0)
+    print(f"Done. Took {t} seconds.")
 
     # don't need to save the processed text
     full_dict_small = {
@@ -114,13 +124,20 @@ def create_database(file_path
         , 'file_path': full_dict['file_path']
         , 'vector'   : full_dict['vector']
     }
+    
+    print("Saving the database...")
+    t0 = time.time()
     with lzma.open('../full_database.pickle', 'wb') as f:
         pickle.dump(full_dict_small, f)
-        print("Saved the full database to ../full_database.pickle")
+        t = round(time.time() - t0)
+        print(f"Saved the full database to ../full_database.pickle. Took {t} seconds.")
 
     # Pickle the nn data
+    print("Saving the nearest-neighbor index...")
+    t0 = time.time()
     with lzma.open('../nn_database.pickle', 'wb') as f:
         pickle.dump(index, f)
-        print("Saved the NN data to ../nn_database.pickle")
+        t = round(time.time() - t0)
+        print(f"Saved the NN data to ../nn_database.pickle. Took {t} seconds.")
 
     return(full_dict, index)
