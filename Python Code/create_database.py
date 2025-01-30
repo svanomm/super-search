@@ -5,9 +5,6 @@ import os, sys, glob, pickle, json, lzma, time
 import pandas as pd
 import numpy as np
 import pynndescent as nn
-
-# Add the current directory to the path
-sys.path.append(os.getcwd())
 from preprocess import prepare_PDF, prepare_text
 
 def prepare_filelist(filepath, allowed_text_types = ['.txt', '.r', '.do', '.py', '.sas', '.sql', '.vba']):
@@ -139,5 +136,8 @@ def create_database(file_path
         pickle.dump(index, f)
         t = round(time.time() - t0)
         print(f"Saved the NN data to ../nn_database.pickle. Took {t} seconds.")
+
+    n = len(full_dict_small['raw_chunk'])
+    print(f"Done! Full database has {n} chunks encoded into {truncated_dimensions} dimensions.")
 
     return(full_dict, index)
