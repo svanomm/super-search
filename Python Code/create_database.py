@@ -1,8 +1,6 @@
 from sentence_transformers import SentenceTransformer
 from tqdm import tqdm
-
-import os, sys, glob, pickle, json, lzma, time
-import pandas as pd
+import os, sys, glob, pickle, lzma, time
 import numpy as np
 import pynndescent as nn
 from preprocess import prepare_PDF, prepare_text
@@ -14,7 +12,12 @@ def prepare_filelist(filepath, allowed_text_types = ['.txt', '.r', '.do', '.py',
     for i in allowed_text_types:
         t.append([file for file in files if file.lower().endswith(i)])
     texts = [ts for tss in t for ts in tss] # flatten the list of lists
-    return {'pdfs': pdfs, 'texts': texts}
+    
+    # total filesizes (in MB)
+    pdf_size  = sum([os.path.getsize(i)/(1024**2) for i in pdfs])
+    text_size = sum([os.path.getsize(i)/(1024**2) for i in texts])
+
+    return {'pdfs': pdfs, 'texts': texts, 'pdf_size': pdf_size, 'text_size': text_size}
 
 def prepare_directory(file_path
                       , backup_file = "chunking_backup"
@@ -28,10 +31,6 @@ def prepare_directory(file_path
         , 'processed_chunk': []
         , 'file_path': []
     }
-
-    # Initiate the backup file
-    with open(f'../{backup_file}.pickle', 'wb') as f:
-        pickle.dump(full_dict, f)
 
     iters_per_dump = 500
     counter = 1
@@ -95,7 +94,11 @@ def create_database(file_path
     # Prepare the directory
     print("Importing and processing files...")
     t0 = time.time()
-    full_dict = prepare_directory(file_path, backup_file, allowed_text_types, chunk_overlap=chunk_overlap, chunk_size=chunk_size)
+    full_dict = prepare_directory(file_path
+                                  , backup_file
+                                  , allowed_text_types
+                                  , chunk_overlap=chunk_overlap
+                                  , chunk_size=chunk_size)
     t = round(time.time() - t0)
     print(f"Done. Took {t} seconds.")
 
