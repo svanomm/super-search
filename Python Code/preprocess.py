@@ -1,14 +1,10 @@
 import pymupdf
 
 # Faster chunker by approximating 1 word per 1 token. No tokenizer.
-
-def setup_chunker(_chunk_size=256, _chunk_overlap=64):
-    # Logic to adjust inputs if necessary
-
+def setup_chunker(_chunk_size:int, _chunk_overlap:int):
     # Option to treat the entire document as 1 chunk
     if _chunk_size == False:
         _chunk_size = 999999999
-
     if 2 * _chunk_overlap > _chunk_size:
         _chunk_overlap = round(_chunk_size / 2)
         print(f"Warning: chunk overlap too large, setting to {_chunk_overlap}.")
@@ -17,129 +13,118 @@ def setup_chunker(_chunk_size=256, _chunk_overlap=64):
         # Split text into words
         words = text.split(' ')
         chunks = []
-
         if chunk_size > len(words):
             chunk_size = len(words)
-
         start = 0
-        end = chunk_size-1
-
-        while end < len(words):
-            chunk = ' '.join(words[start:end])
+        end = chunk_size  # Fixed: Remove the -1
+        while end <= len(words):  # Fixed: Use <= since we're now using inclusive end
+            chunk = ' '.join(words[start:end])  # This now correctly includes chunk_size words
             chunks.append(chunk)
+            start = end - chunk_overlap
+            end = start + chunk_size  # Fixed: Maintain consistent chunk size
 
-            start = end - chunk_overlap + 1
-            end = end + chunk_overlap
-        
-        # make sure the last chunk has all the remaining words
-        if end < len(words) - 1:
-            chunks.append(' '.join(words[end:]))
+        # Handle remaining words if any
+        if start < len(words):
+            chunks.append(' '.join(words[start:]))
 
         return(chunks)
-
     return(chunker)
-
-# Stop Words: common english words that don't add information content
-stop_words = [
-      'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves'
-    , 'you', "you're", "you've", "you'll", "you'd", 'your', 'yours'
-    , 'yourself', 'yourselves', 'he', 'him', 'his', 'himself'
-    , 'she', "she's", 'her', 'hers', 'herself', 'it', "it's", 'its', 'itself'
-    , 'they', 'them', 'their', 'theirs', 'themselves', 'what'
-    , 'this', 'that', "that'll", 'these', 'those', 'am', 'is', 'are', 'was', 'were'
-    , 'be', 'been', 'being', 'have', 'has', 'had', 'having', 'do', 'does', 'did'
-    , 'doing', 'a', 'an', 'the', 'and', 'because'
-    , 'as', 'until', 'while', 'of', 'at', 'by', 'for', 'with', 'about'
-    , 'from', 'so', 'very', 'should', "should've"
-    ]
 
 # Drop words: other words/symbols that should be removed
 drop_words = [
-    '@','&',"\n","\r","©", "\t","®","ø","•","◦","¿","¡","#","^","&","`","~",";",":"
+    '@','&',"\n","\r","©","\t","®","ø","•","◦","¿","¡","#","^","&","`","~",";",":"
     ,'_','|', '.','*','`'
-    , "NBER WORKING PAPER SERIES"
-    , "NATIONAL BUREAU OF ECONOMIC RESEARCH"
-    , "National Bureau of Economic Research"
-    , "ABSTRACT"
 ]
 
 # Preprocessing function for PDFs
-def preprocess(text):
+def preprocess(text:str):
     # Connect words across lines
     text = text.replace('-\n', '')
-
     # Drop words we don't care about where the symbol appears, doesn't need spaces
     for word in drop_words:
         text = text.replace(f'{word}', ' ')
-
-    for word in stop_words:
-        word_upper = word.title()
-        text = text.replace(f' {word} ', ' ')
-        text = text.replace(f' {word_upper} ', ' ')
-
     # Removing double marks
     for i in [' ', '.', ',', '!', '?']:
-        text = text.replace(f'{i}{i}', f'{i}')
+        text = text.replace(f'{i}{i}', f'{i}').replace(f'{i}{i}', f'{i}')
     text = text.replace(' .', '.')
     text = text.strip()
     return(text)
 
 # Function to convert PDF to chunkable text
-def prepare_PDF(in_path, _chunk_size=256, _chunk_overlap=64):
+def prepare_PDF(in_path:str, _chunk_size:int, _chunk_overlap:int):
+    """
+    Converts a PDF document into preprocessed text chunks for further analysis or embedding.
+    
+    This function reads a PDF file, extracts all text content, splits it into overlapping chunks
+    of specified size, and preprocesses each chunk to clean and standardize the text.
+    
+    Parameters:
+    -----------
+    in_path : str
+        File path to the PDF document to be processed
+    _chunk_size : int
+        Target size of each chunk in words (approximate tokens)
+        Set to False to treat the entire document as one chunk
+    _chunk_overlap : int
+        Number of overlapping words between consecutive chunks to maintain context
+    
+    Returns:
+    --------
+    dict
+        A dictionary containing:
+        - 'processed_chunk': List of preprocessed text chunks
+        - 'file_path': List of file paths (same path repeated for each chunk)
+    """
     # Assert that the file is a PDF
     assert in_path.lower().endswith('.pdf'), "This is not a PDF file. Use a different function."
     
+    # Open the PDF document using PyMuPDF
     doc = pymupdf.open(in_path)
 
-    # combine all pages into one list
-    paper = []
-    for page in doc:
-        # extract text from page
-        page_text = page.get_text()
+    # Combine all pages into one string for unified processing
+    paper_one_string = ' '.join([page.get_text() for page in doc])
 
-        # append to paper
-        paper.append(page_text)
-
-    # convert list into string
-    paper_one_string = ' '.join(paper)
-
-    # chunk the raw text
+    # Initialize and apply the chunking strategy
     chunker = setup_chunker(_chunk_size, _chunk_overlap)
     chunks = chunker(paper_one_string)
 
-    # Organize chunks and processed chunks into a dictionary
+    # Create a structured output with both processed chunks and source information
     chunk_data = {
-        'raw_chunk': [chunk for chunk in chunks]
-        , 'processed_chunk': [preprocess(chunk) for chunk in chunks]
-        , 'file_path': [in_path for chunk in chunks]
+        'processed_chunk': [preprocess(chunk) for chunk in chunks],  # Apply text cleaning to each chunk
+        'file_path': [in_path for chunk in chunks]  # Track source document for each chunk
     }
 
     return(chunk_data)
 
 # Function to convert text files to chunkable text
-def prepare_text(in_path, _chunk_size=256, _chunk_overlap=64):
-    # Assert that the file is a text format
-    allowed_formats = ['.txt', '.r', '.do', '.py', '.sas', '.sql', '.vba']
+def prepare_text(in_path:str, _chunk_size:int, _chunk_overlap:int):
+    """
+    Converts a text document into preprocessed text chunks for further analysis or embedding.
+
+    This function reads a text file, extracts all text content, splits it into overlapping chunks
+    of specified size, and preprocesses each chunk to clean and standardize the text.
     
-    c=0
-    for i in allowed_formats:
-        if in_path.lower().endswith(i):
-            c+=1
-    assert c>0, "This is not a valid text file. Use a different function."
+    Parameters:
+    -----------
+    in_path : str
+        File path to the PDF document to be processed
+    _chunk_size : int
+        Target size of each chunk in words (approximate tokens)
+        Set to False to treat the entire document as one chunk
+    _chunk_overlap : int
+        Number of overlapping words between consecutive chunks to maintain context
     
+    Returns:
+    --------
+    dict
+        A dictionary containing:
+        - 'processed_chunk': List of preprocessed text chunks
+        - 'file_path': List of file paths (same path repeated for each chunk)
+    """
     doc = pymupdf.open(in_path, filetype='txt')
 
-    # combine all pages into one list
-    paper = []
-    for page in doc:
-        # extract text from page
-        page_text = page.get_text()
-
-        # append to paper
-        paper.append(page_text)
-
     # convert list into string
-    paper_one_string = ' '.join(paper)
+    paper_one_string = ' '.join([page.get_text() for page in doc])
 
     # chunk the raw text
     chunker = setup_chunker(_chunk_size, _chunk_overlap)
@@ -147,8 +132,7 @@ def prepare_text(in_path, _chunk_size=256, _chunk_overlap=64):
 
     # Organize chunks and processed chunks into a dictionary
     chunk_data = {
-        'raw_chunk': [chunk for chunk in chunks]
-        , 'processed_chunk': [preprocess(chunk) for chunk in chunks]
+        'processed_chunk': [preprocess(chunk) for chunk in chunks]
         , 'file_path': [in_path for chunk in chunks]
     }
 

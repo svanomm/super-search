@@ -1,2 +1,4 @@
 *.pickle
 \.venv
+*.pdf
+*.json

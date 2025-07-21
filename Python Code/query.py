@@ -1,27 +1,19 @@
-from sentence_transformers import SentenceTransformer
+from model2vec import StaticModel
 from preprocess import preprocess
 import pynndescent
 
 def query(query:str, index:pynndescent.pynndescent_.NNDescent, chunks:dict
-            , model_name:str = "sentence-transformers/static-retrieval-mrl-en-v1"
-            , truncated_dimensions:int = 1024
+            , model_name:str = "minishlab/potion-retrieval-32M"
             , num_results:int = 3
             , query_epsilon:float = 0.1
             ):
     
     ### Error checks
-    assert truncated_dimensions >= 1, "You tried to encode into < 1 dimensions."
     num_results = 1 if num_results < 1 else num_results
     query_epsilon = 0.01 if query_epsilon < 0.01 else query_epsilon
 
-    truncated_dimensions = index.dim if truncated_dimensions != index.dim else truncated_dimensions
-
     # Define the model
-    model = SentenceTransformer(
-        model_name
-        , device="cpu"
-        , truncate_dim=truncated_dimensions
-        )
+    model = StaticModel.from_pretrained(model_name)
     
     # Encode the query
     query_vec = model.encode(query)
@@ -30,7 +22,7 @@ def query(query:str, index:pynndescent.pynndescent_.NNDescent, chunks:dict
                           , epsilon = query_epsilon)
     
     results = {
-        'chunk_text': [chunks['raw_chunk'][i] for i in vecs[0][0]]
+        'chunk_text': [chunks['processed_chunk'][i] for i in vecs[0][0]]
         ,'filepath':  [chunks['file_path'][i] for i in vecs[0][0]]
     }
 
