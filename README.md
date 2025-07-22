@@ -11,7 +11,7 @@ The goal of this project is to provide an entirely local platform for both tradi
 - ~~Switch to approximate NN search (pynndescent) for fast queries~~
 - Add BM25 search as a complement to semantic search (in progress)
 - Functionality for both top-n file retrieval as well as chunk-specific searching
-- Scan working directory for newly added/changed files that can be updated in the search indices
+- Scan working directory for newly added/changed files that can be updated in the search indices (in progress)
 - Add OCR function (tesseract) for non-searchable PDFs
 - Integrate **MarkItDown** to allow for docx, xlsx, pptx file conversion.
 - Add a GUI
