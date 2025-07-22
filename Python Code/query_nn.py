@@ -2,7 +2,7 @@ from model2vec import StaticModel
 from preprocess import preprocess
 import pynndescent
 
-def query(query:str, index:pynndescent.pynndescent_.NNDescent, chunks:dict
+def query_nn(query:str, index:pynndescent.pynndescent_.NNDescent, chunks:dict
             , model_name:str = "minishlab/potion-retrieval-32M"
             , num_results:int = 3
             , query_epsilon:float = 0.1
@@ -16,7 +16,7 @@ def query(query:str, index:pynndescent.pynndescent_.NNDescent, chunks:dict
     model = StaticModel.from_pretrained(model_name)
     
     # Encode the query
-    query_vec = model.encode(query)
+    query_vec = model.encode(preprocess(query))
     vecs = index.query(query_vec.reshape(1,-1)
                           , k = num_results
                           , epsilon = query_epsilon)
