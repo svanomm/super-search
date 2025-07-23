@@ -1,163 +1,87 @@
-import os
-import json
-import time
+import os, json, glob, time
 from typing import Dict, Union, List
 
+allowed_texts = ['.pdf', '.txt', '.r', '.do', '.py', '.ipynb', '.sas', '.sql', '.vba', '.md']
 
-def create_new_list(filepath: str, output_filename: str = None) -> Dict[str, float]:
+def file_scanner(
+        filepath: str, 
+        allowed_text_types: List[str] = allowed_texts,
+        file_list_path: str = None,
+        output_filename: str = None
+        ) -> Dict[str, float]:
     """
-    Scans the given directory recursively and collects all files with their last modified dates.
-    
+    Recursively scans a directory for files with allowed extensions, tracks their metadata, and saves the results to a JSON file.
+
     Args:
-        filepath (str): Path to the directory to scan recursively.
-        output_filename (str, optional): Output JSON filename. If None, uses 'file_list.json'.
-    
+        filepath (str): Root directory to search for files.
+        allowed_text_types (List[str], optional): List of allowed file extensions. Defaults to allowed_texts.
+        file_list_path (str, optional): Path to an existing JSON file list to update. If None, starts a new list.
+        output_filename (str, optional): Filename to save the resulting file list. Defaults to "file_list.json".
+
     Returns:
-        dict: Dictionary mapping file paths to their last modified timestamps.
+        Dict[str, float]: Dictionary containing lists of filepaths, last modified times, date added, and file IDs.
     """
-    if not os.path.exists(filepath):
-        raise ValueError(f"Path does not exist: {filepath}")
     
-    if not os.path.isdir(filepath):
-        raise ValueError(f"Path is not a directory: {filepath}")
-    
-    file_list = {}
-    
+    flag_existing=0
+    start_length=0
+
+    if file_list_path is None:
+        file_list = {
+            'filepath': [], 'last_modified': [], 'date_added': [], 'file_id': []
+        }
+    else:
+        with open(file_list_path, 'r') as f:
+            file_list = json.load(f)
+        # Check if the file_list has the required keys
+        if not all(key in file_list for key in ['filepath', 'last_modified', 'date_added', 'file_id']):
+            raise ValueError("Invalid file list format. Missing required keys.")
+        else:
+            print("Successfully loaded existing file list.")
+            flag_existing=1
+            start_length=len(file_list['filepath'])
+
+    if output_filename is None:
+        output_filename = "file_list.json"
+
     # Use os.walk for recursive directory traversal
+    print(f"Searching for files in {filepath} with allowed types: {allowed_text_types}")
     for root, dirs, files in os.walk(filepath):
         for file in files:
+            # Check if the file type is allowed
+            if not any(file.endswith(ext) for ext in allowed_text_types):
+                continue
+            
             full_path = os.path.join(root, file)
             try:
                 # Get last modified time
                 mod_time = os.path.getmtime(full_path)
-                file_list[full_path] = mod_time
+
+                # We ignore the file if the same filepath and modified date are already in the list
+                if full_path in file_list['filepath'] and file_list['last_modified'][file_list['filepath'].index(full_path)] == mod_time:
+                    continue
+
+                file_list['filepath'].append(full_path)
+                file_list['last_modified'].append(mod_time)
+                file_list['date_added'].append(time.time())
+                file_list['file_id'].append(len(file_list['filepath']) - 1)  # Assign an ID based on the current length
             except (OSError, IOError) as e:
                 # Skip files we can't access (permissions, etc.)
                 print(f"Warning: Could not access {full_path}: {e}")
                 continue
-    
+    print("Done scanning.")
+
+    if start_length > 0:
+        added = len(file_list['filepath']) - start_length
+
     # Save to JSON file
-    if output_filename is None:
-        output_filename = "file_list.json"
-    
     try:
         with open(output_filename, 'w') as f:
             json.dump(file_list, f, indent=2)
-        print(f"File list saved to {output_filename}")
+        if flag_existing == 0:
+            print(f"File list saved to {output_filename} with {len(file_list['filepath'])} files.")
+        else:
+            print(f"File list updated in {output_filename} with {added} new files.")
     except IOError as e:
         print(f"Warning: Could not save to {output_filename}: {e}")
-    
+
     return file_list
-
-
-def update_list(filepath: str, existing_file_list: Union[str, Dict[str, float]], 
-                output_filename: str = None) -> Dict[str, float]:
-    """
-    Scans the given directory recursively and updates an existing file list with new or modified files.
-    
-    Args:
-        filepath (str): Path to the directory to scan recursively.
-        existing_file_list (Union[str, Dict[str, float]]): Either a path to existing JSON file 
-                                                          or a dictionary of existing files.
-        output_filename (str, optional): Output JSON filename. If None, overwrites existing file
-                                        if existing_file_list is a file path, otherwise uses 'updated_file_list.json'.
-    
-    Returns:
-        dict: Updated dictionary mapping file paths to their last modified timestamps.
-    """
-    if not os.path.exists(filepath):
-        raise ValueError(f"Path does not exist: {filepath}")
-    
-    if not os.path.isdir(filepath):
-        raise ValueError(f"Path is not a directory: {filepath}")
-    
-    # Load existing file list
-    if isinstance(existing_file_list, str):
-        # It's a file path
-        if not os.path.exists(existing_file_list):
-            raise ValueError(f"Existing file list does not exist: {existing_file_list}")
-        
-        try:
-            with open(existing_file_list, 'r') as f:
-                existing_files = json.load(f)
-        except (IOError, json.JSONDecodeError) as e:
-            raise ValueError(f"Could not load existing file list: {e}")
-        
-        # Set default output filename to overwrite the existing file
-        if output_filename is None:
-            output_filename = existing_file_list
-    else:
-        # It's already a dictionary
-        existing_files = existing_file_list.copy()
-        if output_filename is None:
-            output_filename = "updated_file_list.json"
-    
-    # Start with existing files
-    updated_list = existing_files.copy()
-    
-    # Scan directory for current files
-    current_files = {}
-    for root, dirs, files in os.walk(filepath):
-        for file in files:
-            full_path = os.path.join(root, file)
-            try:
-                mod_time = os.path.getmtime(full_path)
-                current_files[full_path] = mod_time
-            except (OSError, IOError) as e:
-                print(f"Warning: Could not access {full_path}: {e}")
-                continue
-    
-    # Update list with new or modified files
-    new_files_count = 0
-    modified_files_count = 0
-    
-    for file_path, mod_time in current_files.items():
-        if file_path not in existing_files:
-            # New file
-            updated_list[file_path] = mod_time
-            new_files_count += 1
-        elif existing_files[file_path] != mod_time:
-            # Modified file (different timestamp)
-            updated_list[file_path] = mod_time
-            modified_files_count += 1
-    
-    print(f"Found {new_files_count} new files and {modified_files_count} modified files")
-    
-    # Save updated list
-    try:
-        with open(output_filename, 'w') as f:
-            json.dump(updated_list, f, indent=2)
-        print(f"Updated file list saved to {output_filename}")
-    except IOError as e:
-        print(f"Warning: Could not save to {output_filename}: {e}")
-    
-    return updated_list
-
-
-if __name__ == "__main__":
-    # Example usage
-    import sys
-    
-    if len(sys.argv) < 2:
-        print("Usage: python file_scanner.py <directory_path> [create|update] [existing_file_list]")
-        print("Examples:")
-        print("  python file_scanner.py /path/to/scan create")
-        print("  python file_scanner.py /path/to/scan update existing_list.json")
-        sys.exit(1)
-    
-    directory = sys.argv[1]
-    action = sys.argv[2] if len(sys.argv) > 2 else "create"
-    
-    if action == "create":
-        result = create_new_list(directory)
-        print(f"Created file list with {len(result)} files")
-    elif action == "update":
-        if len(sys.argv) < 4:
-            print("Error: update action requires existing file list path")
-            sys.exit(1)
-        existing_list = sys.argv[3]
-        result = update_list(directory, existing_list)
-        print(f"Updated file list now contains {len(result)} files")
-    else:
-        print(f"Unknown action: {action}. Use 'create' or 'update'")
-        sys.exit(1)
