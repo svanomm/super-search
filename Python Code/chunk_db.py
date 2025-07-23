@@ -34,7 +34,6 @@ def chunk_db(
 
     # Process files
     for file in tqdm(file_list['filepath'], desc = "Chunking Files"):
-        print(file)
         # Find the corresponding file_id
         row = file_list['filepath'].index(file)
         f_id = file_list['file_id'][row]

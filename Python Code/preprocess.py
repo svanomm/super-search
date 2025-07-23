@@ -1,4 +1,5 @@
 import pymupdf
+import os
 
 # Faster chunker by approximating 1 word per 1 token. No tokenizer.
 def setup_chunker(_chunk_size:int, _chunk_overlap:int):
@@ -77,12 +78,17 @@ def prepare_PDF(in_path:str, _chunk_size:int, _chunk_overlap:int):
     """
     # Assert that the file is a PDF
     assert in_path.lower().endswith('.pdf'), "This is not a PDF file. Use a different function."
-    
-    # Open the PDF document using PyMuPDF
-    doc = pymupdf.open(in_path)
+    if not os.path.isfile(in_path):
+        raise FileNotFoundError(f"File not found: {in_path}")
+    try:
+        doc = pymupdf.open(in_path)
+    except Exception as e:
+        raise RuntimeError(f"Failed to open PDF: {e}")
 
-    # Combine all pages into one string for unified processing
-    paper_one_string = ' '.join([page.get_text() for page in doc])
+    try:
+        paper_one_string = preprocess(' '.join([page.get_text() for page in doc]))
+    except Exception as e:
+        raise RuntimeError(f"Failed to extract text from PDF: {e}")
 
     # Initialize and apply the chunking strategy
     chunker = setup_chunker(_chunk_size, _chunk_overlap)
@@ -90,7 +96,7 @@ def prepare_PDF(in_path:str, _chunk_size:int, _chunk_overlap:int):
 
     # Create a structured output with both processed chunks and source information
     chunk_data = {
-        'processed_chunk': [preprocess(chunk) for chunk in chunks],  # Apply text cleaning to each chunk
+        'processed_chunk': [chunk for chunk in chunks],  # Apply text cleaning to each chunk
         'file_path': [in_path for chunk in chunks]  # Track source document for each chunk
     }
 
@@ -121,10 +127,16 @@ def prepare_text(in_path:str, _chunk_size:int, _chunk_overlap:int):
         - 'processed_chunk': List of preprocessed text chunks
         - 'file_path': List of file paths (same path repeated for each chunk)
     """
-    doc = pymupdf.open(in_path, filetype='txt')
+    if not os.path.isfile(in_path):
+        raise FileNotFoundError(f"File not found: {in_path}")
+    try:
+        with open(in_path, 'r', encoding='utf-8') as file:
+            doc = file.read()
+    except Exception as e:
+        raise RuntimeError(f"Failed to read text file: {e}")
 
     # convert list into string
-    paper_one_string = ' '.join([page.get_text() for page in doc])
+    paper_one_string = preprocess(doc)
 
     # chunk the raw text
     chunker = setup_chunker(_chunk_size, _chunk_overlap)
@@ -132,7 +144,7 @@ def prepare_text(in_path:str, _chunk_size:int, _chunk_overlap:int):
 
     # Organize chunks and processed chunks into a dictionary
     chunk_data = {
-        'processed_chunk': [preprocess(chunk) for chunk in chunks]
+        'processed_chunk': [chunk for chunk in chunks]
         , 'file_path': [in_path for chunk in chunks]
     }
 

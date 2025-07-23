@@ -4,6 +4,17 @@ def query_bm25(query:str
             , index_path:str
             , num_results:int = 3
             ):
+    """
+    Retrieve the top-k most relevant documents for a given query using a BM25 index.
+
+    Args:
+        query (str): The search query string.
+        index_path (str): Path to the BM25 index file.
+        num_results (int, optional): Number of top results to return. Defaults to 3.
+
+    Returns:
+        dict: A dictionary with keys 'text' and 'id', each containing a list of results.
+    """
     stemmer = Stemmer.Stemmer("english")
 
     ### Error checks
@@ -19,7 +30,7 @@ def query_bm25(query:str
     
     results = {
         'text': [i['text'] for i in results[0]]
-        , 'id': [i['id'] for i in results[0]]
+        , 'id': [i['id']   for i in results[0]]
     }
 
     return(results)
