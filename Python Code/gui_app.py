@@ -26,8 +26,9 @@ def make_window(theme):
 
     search_layout = [
                     [sg.Text('This tab is for searching your indexed files.')],
+                    [sg.Text('Index Status: No index loaded', key='-INDEX STATUS-')],
                     [sg.Text('Input your search query below:')],
-                    [sg.Input(key='-SEARCH QUERY-', size=(40, 1))],
+                    [sg.Input(key='-SEARCH QUERY-', size=(40, 1), enable_events=True)],
                     [sg.Button('Search'), sg.Button('Clear Search')],
                     [sg.Text('Search Results:')],
                     [sg.Listbox(values=[], size=(60, 10), key='-SEARCH RESULTS-', expand_x=True, expand_y=True, enable_events=True)],
@@ -73,6 +74,14 @@ def main():
     flag_semantic_index = 0
     search_results = []
     bm25_index_path = 'index_bm25'  # Default BM25 index path
+    
+    # Check if index already exists and update status
+    if os.path.exists(bm25_index_path):
+        window['-INDEX STATUS-'].update(f"Index found: {bm25_index_path}")
+        print(f"Found existing BM25 index at: {bm25_index_path}")
+    else:
+        window['-INDEX STATUS-'].update("No index found - build an index first")
+        print("No existing BM25 index found")
 
     # This is an Event Loop 
     while True:
@@ -122,15 +131,34 @@ def main():
                 sg.popup_error("No files to index. Please select a folder to index first.", keep_on_top=True)
             else:
                 try:
+                    print("Starting index building process...")
                     sg.popup("Building chunk database. Please wait...", keep_on_top=True, auto_close=True, auto_close_duration=2)
-                    db = chunk_db(file_list=file_list, chunk_size=999999)
+                    db, _ = chunk_db(file_list=file_list, chunk_size=999999)
+                    
+                    print("Chunk database created successfully. Creating BM25 index...")
                     sg.popup("Creating BM25 index...", keep_on_top=True, auto_close=True, auto_close_duration=2)
                     retriever = create_bm25_index(chunk_db_path='../chunked_db.json')
-                    # Update the BM25 index path
+                    
+                    # Update the BM25 index path - the index is saved as 'index_bm25' directory
                     bm25_index_path = 'index_bm25'
-                    sg.popup("Index built successfully!", keep_on_top=True, auto_close=True, auto_close_duration=2)
+                    print(f"BM25 index saved to: {bm25_index_path}")
+                    
+                    # Update index status in GUI
+                    try:
+                        # Try to load the index to get document count
+                        # This would normally use: retriever = bm25s.BM25.load(bm25_index_path, load_corpus=True)
+                        # For now, we'll show a general status
+                        index_status = f"Index ready: {bm25_index_path}"
+                        window['-INDEX STATUS-'].update(index_status)
+                    except Exception:
+                        window['-INDEX STATUS-'].update("Index built (status unknown)")
+                    
+                    sg.popup("Index built successfully! You can now search your documents.", keep_on_top=True, auto_close=True, auto_close_duration=3)
+                    
                 except Exception as e:
-                    sg.popup_error(f"Error building index: {str(e)}", keep_on_top=True)
+                    error_msg = f"Error building index: {str(e)}"
+                    sg.popup_error(error_msg, keep_on_top=True)
+                    print(error_msg)
 
         elif event == 'Search':
             query = values['-SEARCH QUERY-']
@@ -140,32 +168,99 @@ def main():
                 sg.popup_error("No BM25 index found. Please build an index first.", keep_on_top=True)
             else:
                 try:
+                    print(f"Searching for: '{query}'")
                     # Perform BM25 search
                     results = query_bm25(query=query, index_path=bm25_index_path, num_results=10)
                     
                     # Format results for display
                     search_results = []
-                    for i, (text, doc_id) in enumerate(zip(results['text'], results['id'])):
-                        # Truncate text for display
-                        display_text = text[:100] + "..." if len(text) > 100 else text
-                        search_results.append(f"[{i+1}] ID:{doc_id} - {display_text}")
-                    
-                    # Update the search results listbox
-                    window['-SEARCH RESULTS-'].update(search_results)
-                    
-                    print(f"Found {len(search_results)} results for query: '{query}'")
+                    if results['text'] and len(results['text']) > 0:
+                        for i, (text, chunk_id) in enumerate(zip(results['text'], results['id'])):
+                            # Clean up text for display - remove extra whitespace and newlines
+                            clean_text = ' '.join(text.split())
+                            # Truncate text for display in listbox
+                            display_text = clean_text[:150] + "..." if len(clean_text) > 150 else clean_text
+                            search_results.append(f"[{i+1}] Chunk {chunk_id}: {display_text}")
+                        
+                        # Update the search results listbox
+                        window['-SEARCH RESULTS-'].update(search_results)
+                        print(f"Found {len(search_results)} results for query: '{query}'")
+                    else:
+                        # No results found
+                        window['-SEARCH RESULTS-'].update(["No results found for your query."])
+                        print(f"No results found for query: '{query}'")
                     
                 except Exception as e:
-                    sg.popup_error(f"Error performing search: {str(e)}", keep_on_top=True)
-                    print(f"Search error: {str(e)}")
+                    error_msg = f"Error performing search: {str(e)}"
+                    sg.popup_error(error_msg, keep_on_top=True)
+                    print(error_msg)
+                    # Clear results on error
+                    window['-SEARCH RESULTS-'].update([f"Error: {str(e)}"])
 
         elif event == 'Clear Search':
             window['-SEARCH QUERY-'].update('')
             window['-SEARCH RESULTS-'].update([])
             search_results = []
 
-        elif event == '-SEARCH-QUERY-':
-            query = values['-SEARCH QUERY-']
+        elif event == '-SEARCH QUERY-':
+            # Handle Enter key press in search query field
+            if '\r' in values['-SEARCH QUERY-'] or '\n' in values['-SEARCH QUERY-']:
+                # Trigger search when Enter is pressed
+                event = 'Search'
+                # Remove the newline from the query
+                query_text = values['-SEARCH QUERY-'].replace('\r', '').replace('\n', '')
+                window['-SEARCH QUERY-'].update(query_text)
+                # Manually call the search handler
+                query = query_text
+                if not query.strip():
+                    sg.popup_error("Please enter a search query.", keep_on_top=True)
+                elif not os.path.exists(bm25_index_path):
+                    sg.popup_error("No BM25 index found. Please build an index first.", keep_on_top=True)
+                else:
+                    try:
+                        print(f"Searching for: '{query}'")
+                        # Perform BM25 search
+                        results = query_bm25(query=query, index_path=bm25_index_path, num_results=10)
+                        
+                        # Format results for display
+                        search_results = []
+                        if results['text'] and len(results['text']) > 0:
+                            for i, (text, chunk_id) in enumerate(zip(results['text'], results['id'])):
+                                # Clean up text for display - remove extra whitespace and newlines
+                                clean_text = ' '.join(text.split())
+                                # Truncate text for display in listbox
+                                display_text = clean_text[:150] + "..." if len(clean_text) > 150 else clean_text
+                                search_results.append(f"[{i+1}] Chunk {chunk_id}: {display_text}")
+                            
+                            # Update the search results listbox
+                            window['-SEARCH RESULTS-'].update(search_results)
+                            print(f"Found {len(search_results)} results for query: '{query}'")
+                        else:
+                            # No results found
+                            window['-SEARCH RESULTS-'].update(["No results found for your query."])
+                            print(f"No results found for query: '{query}'")
+                        
+                    except Exception as e:
+                        error_msg = f"Error performing search: {str(e)}"
+                        sg.popup_error(error_msg, keep_on_top=True)
+                        print(error_msg)
+                        # Clear results on error
+                        window['-SEARCH RESULTS-'].update([f"Error: {str(e)}"])
+
+        elif event == '-SEARCH RESULTS-':
+            # Handle search result selection
+            if values['-SEARCH RESULTS-']:
+                selected_result = values['-SEARCH RESULTS-'][0]
+                # Show more detail of the selected result
+                try:
+                    # Extract chunk ID from the selected result
+                    if "Chunk " in selected_result:
+                        chunk_id_str = selected_result.split("Chunk ")[1].split(":")[0]
+                        # For now, just show a popup with the selected result
+                        sg.popup_scrolled("Selected Result", selected_result, 
+                                        size=(80, 20), keep_on_top=True)
+                except Exception as e:
+                    print(f"Error showing result details: {e}")
 
         elif event == "Set Theme":
             if values['-THEME LISTBOX-']:
