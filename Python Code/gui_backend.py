@@ -31,7 +31,7 @@ def make_window(theme):
                     [sg.Input(key='-SEARCH QUERY-', size=(40, 1), enable_events=True)],
                     [sg.Button('Search'), sg.Button('Clear Search')],
                     [sg.Text('Search Results:')],
-                    [sg.Listbox(values=[], size=(60, 10), key='-SEARCH RESULTS-', expand_x=True, expand_y=True, enable_events=True)],
+                    [sg.Listbox(values=[], size=(60, 10), key='-SEARCH RESULTS-', expand_x=True, expand_y=True, enable_events=True, horizontal_scroll=True)],
                     [sg.Button('Test Progress Bar'), sg.ProgressBar(100, orientation='h', size=(20, 20), key='-PROGRESS BAR-')]
                     ]
 
@@ -43,20 +43,12 @@ def make_window(theme):
     popup_layout = [[sg.Text("Popup Testing")],
                     [sg.Button("Open Folder")],
                     [sg.Button("Open File")]]
-    
-    theme_layout = [[sg.Text("See how elements look under different themes by choosing a different theme here!")],
-                    [sg.Listbox(values = sg.theme_list(), 
-                      size =(20, 12), 
-                      key ='-THEME LISTBOX-',
-                      enable_events = True)],
-                      [sg.Button("Set Theme")]]
-    
+
     layout = [ [sg.MenubarCustom(menu_def, key='-MENU-', font='Courier 15', tearoff=True)],
                 [sg.Text('A Local Search Engine with Semantic Capabilities', size=(20, 1), justification='left', font=("Helvetica", 16), relief=sg.RELIEF_RIDGE, expand_x=True, k='-TEXT HEADING-', enable_events=True)]]
     layout +=[[sg.TabGroup([[  sg.Tab('Input', input_layout),
                                sg.Tab('Search', search_layout),
                                sg.Tab('Output', logging_layout)]], key='-TAB GROUP-', expand_x=True, expand_y=True),
-
                ]]
     layout[-1].append(sg.Sizegrip())
     window = sg.Window('super-search', layout, right_click_menu=right_click_menu_def, right_click_menu_tearoff=True, grab_anywhere=True, resizable=True, margins=(0,0), use_custom_titlebar=True, finalize=True, keep_on_top=True)
@@ -133,7 +125,7 @@ def main():
                 try:
                     print("Starting index building process...")
                     sg.popup("Building chunk database. Please wait...", keep_on_top=True, auto_close=True, auto_close_duration=2)
-                    db, _ = chunk_db(file_list=file_list, chunk_size=999999)
+                    db, _ = chunk_db(file_list=file_list, chunk_size=99999999)
                     
                     print("Chunk database created successfully. Creating BM25 index...")
                     sg.popup("Creating BM25 index...", keep_on_top=True, auto_close=True, auto_close_duration=2)
@@ -180,7 +172,7 @@ def main():
                             clean_text = ' '.join(text.split())
                             # Truncate text for display in listbox
                             display_text = clean_text[:150] + "..." if len(clean_text) > 150 else clean_text
-                            search_results.append(f"[{i+1}] Chunk {chunk_id}: {display_text}")
+                            search_results.append(f"[{i+1}]: {display_text}")
                         
                         # Update the search results listbox
                         window['-SEARCH RESULTS-'].update(search_results)
