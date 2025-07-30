@@ -33,6 +33,7 @@ def chunk_db(
     assert len(file_list['filepath']) > 0, "No files found in the file list."
 
     # Process files
+    print(f"Processing {len(file_list['filepath'])} files for chunking...")
     for file in tqdm(file_list['filepath'], desc = "Chunking Files"):
         # Find the corresponding file_id
         row = file_list['filepath'].index(file)
@@ -56,12 +57,15 @@ def chunk_db(
     print("Done processing files.")
 
     # Add a chunk id field which is just the number
+    print("Finalizing chunk database...")
     full_dict['chunk_id'] = list(range(len(full_dict['processed_chunk'])))
 
     # Export as JSON
-    print(f"Saving processed data.")
-    with open(f'../{output_file}.json', 'w', encoding='utf-8') as f:
-        json.dump(full_dict, f, ensure_ascii=False, indent=2)
+    print(f"Saving chunk database to file...")
+    with tqdm(total=1, desc="Writing JSON file", unit="file") as pbar:
+        with open(f'../{output_file}.json', 'w', encoding='utf-8') as f:
+            json.dump(full_dict, f, ensure_ascii=False, indent=2)
+        pbar.update(1)
 
     print(f"Processed {len(full_dict['processed_chunk'])} chunks from {len(file_list['filepath'])} files.")
     print(f"Data saved to ../{output_file}.json")

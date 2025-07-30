@@ -20,12 +20,18 @@ def create_ann_index(chunk_db_path:str
     # Encode the chunks
     print("Encoding the text...")
     vecs = model.encode(full_dict['processed_chunk'], show_progress_bar=True)
-    full_dict['vector'] = [i for i in np.unstack(vecs)]
+    
+    print("Converting vectors to list format...")
+    with tqdm(total=1, desc="Processing vectors", unit="step") as pbar:
+        full_dict['vector'] = [i for i in np.unstack(vecs)]
+        pbar.update(1)
 
     print("Saving the database...")
-    with lzma.open('../full_database.pickle', 'wb') as f:
-        pickle.dump(full_dict, f)
-        print(f"Saved the full database to ../full_database.pickle.")
+    with tqdm(total=1, desc="Saving full database", unit="file") as pbar:
+        with lzma.open('../full_database.pickle', 'wb') as f:
+            pickle.dump(full_dict, f)
+        pbar.update(1)
+    print(f"Saved the full database to ../full_database.pickle.")
     
     # Create the nearest-neighbor index
     #print("Creating the nearest-neighbor index...")
