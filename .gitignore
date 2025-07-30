@@ -2,3 +2,5 @@
 \.venv
 *.pdf
 *.json
+__pycache__
+*.pyc
