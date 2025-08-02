@@ -7,6 +7,7 @@ def chunk_db(
         , file_list = None
         , output_file = "chunked_db"
         , chunk_size=2056, chunk_overlap=16
+        , progress_callback=None
         ):
 
     # If given a file_list, don't load anything
@@ -34,10 +35,10 @@ def chunk_db(
 
     # Process files
     print(f"Processing {len(file_list['filepath'])} files for chunking...")
-    for file in tqdm(file_list['filepath'], desc = "Chunking Files"):
+    for idx, file in enumerate(file_list['filepath']):
+        print(f"Processing file {idx + 1}/{len(file_list['filepath'])}: {file}")
         # Find the corresponding file_id
-        row = file_list['filepath'].index(file)
-        f_id = file_list['file_id'][row]
+        f_id = file_list['file_id'][idx]
 
         # Confirm file exists
         if not os.path.exists(file):
@@ -53,6 +54,10 @@ def chunk_db(
         
         full_dict['processed_chunk'].extend(iter_dict['processed_chunk'])
         full_dict['file_id'].extend([f_id] * len(iter_dict['processed_chunk']))
+
+        # Call the progress callback if provided
+        if progress_callback is not None:
+            progress_callback(idx + 1)
 
     print("Done processing files.")
 

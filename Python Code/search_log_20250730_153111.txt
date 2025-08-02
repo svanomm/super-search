@@ -1,0 +1,77 @@
+2025-07-30 15:31:11,476 - Application started
+2025-07-30 15:31:11,748 - Found existing BM25 index at: index_bm25
+2025-07-30 15:31:22,049 - ============ Event = Open Folder to Index ==============
+2025-07-30 15:31:22,049 - -------- Values Dictionary (key=value) --------
+2025-07-30 15:31:22,049 - -MENU- = None
+2025-07-30 15:31:22,049 - -CREATE_SEMANTIC_INDEX- = False
+2025-07-30 15:31:22,050 - -FILELIST_DISPLAY- = 
+2025-07-30 15:31:22,050 - -SEARCH QUERY- = 
+2025-07-30 15:31:22,050 - -SEARCH RESULTS- = []
+2025-07-30 15:31:22,050 - -TAB GROUP- = Input
+2025-07-30 15:31:40,912 - ============ Event = -BUILD_INDEX- ==============
+2025-07-30 15:31:40,912 - -------- Values Dictionary (key=value) --------
+2025-07-30 15:31:40,912 - -MENU- = None
+2025-07-30 15:31:40,912 - -CREATE_SEMANTIC_INDEX- = False
+2025-07-30 15:31:40,912 - -FILELIST_DISPLAY- = C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Agniel et al. (2023) - Generalized difference in differences.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Angrist Pischke - Mostly Harmless Econometrics - 2008.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Arkhangelsky et al. (2021) - Synthetic Difference-in-Differences.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Ashenfelter et al. (2004) - Econometric Methods in Staples.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Ashenfelter, Orley and Daniel Hosken (2008) - The Effect of Mergers on Consumer Prices - Evidence from Five Selected Case Studies.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Athey and Imbens (2017) - State of Applied Econometrics.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Athey and Imbens (2018) - Design-based analysis in Difference-in-Differences settings with staggered adoption.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Autor (2003) - Outsourcing at Will (Difference in Difference).pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Baker et al. (2022) - How much should we trust staggered difference-in-difference estimates.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Benson et al. (AEA 2024) - Concentration and Geographic Proximity in Antitrust Policy - Evidence from Bank Mergers.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Berry, Steven and Joel Waldfogel (2001) - Do Mergers Increase Product Variety - Evidence from Radio Broadcasting.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Bertrand Duflo and Mullainathan (2002) - How Much Should We Trust Differences-in-Differences Estimates.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Bojinov et al. (2021) - Panel Experiments and Dynamic Causal Effects.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Borusyak and Jaravel (2018) - Revisiting Event Study Designs, with an Application to the Estimation.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Borusyak et al. (2024) - Revisiting Event Study Designs - Robust and Efficient Estimation.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Borusyak, Jaravel, and Spiess (2022) - Revisiting Event Study Designs.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Brot-Goldberg et al. (2024) - Is there too Little Antitrust Enforcement in the US Hospital Sector.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Caetano and Callaway (2023) - Difference-in-Differences with Time-Varying Covariates in the Parallel Trends Assumption.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Callaway and Sant-Anna (2020) - Difference in Differences with Multiple Time Periods.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Callaway and Sant-Anna (2021) - Difference in Differences with Multiple Time Periods.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Callaway et al. (2024) - Difference-in-Differences with a Continuous Treatment.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Carlton et al. (2019) - Are legacy airline mergers pro- or anti-competitive.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Cengiz et al. (2019) - The Effect of Minimum Wages on Low-Wage Jobs.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Clarke (2017) - Estimating Difference-in-Differences in the Presence of Spillovers.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\CRA Competition Memo - Taking the con out of econometrics new challeneges to difference in differences.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\de Chaisemartin and DHaultfoeuille (2020) Two-Way Fixed Effects and Diff-in-Diff.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\de Chaisemartin and DHaultfoeuille (2022) Two-Way Fixed Effects and Diff-in-Diff Survey.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\de Chaisemartin et al. (2024) - Difference-in-Differences for Continuous Treatments and Instruments with Stayers.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Designing Difference in Difference Studies with Staggered Treatment Adoption.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Dube et al. (2023) - A Local Projections Approach To Diff-in-Diff.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Egami and Yamauchi (2022) - Using Multiple Pretreatment Periods to Improve Difference-in-Differences.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Faghani and VanOmmeren (JCLE 2025) - Staggered Difference-in-Differences for Antitrust Practitioners.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Faletto (2023) - Fused Extended Two-Way Fixed Effects.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Fredriksson and de Oliveira (2019) - Impact evaluation using difference-in-differences.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Freyaldenhoven et al (2019) - Pre Event Trends in the Panel Event Study Design.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Gardner (2021) - Two-stage differences in differences.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Gertler, et al, Impact Evaluation In Practice, World Bank Publications, 2011.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Gilbert, Scott - Testing for Price-Fixing Effects - a Difference-in-Difference Approach.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Goodman-Bacon (2021) - Difference-in-Difference with Variation in Treatment Timing.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Goolsbee and Syverson (2008) - How do Incumbents Respond to the Threat of Entry.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Hosken and Taylor (2020) - Vertical Disintegration The Effect of Refiner Exit from Gasoline Retailing.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Imai and Kim (2020) - On the use of Two-Way Fixed Effects Regression Models for Causal Inference with Panel Data.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Jakiela (2021) - Simple Diagnostics for Two-Way Fixed Effects.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Liu, Wang, and Xu (2022) - A Practical Guide to Counterfactual Estimators for Causal Inference.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Maier-Rigaud and Sudaric (2019) - The Difference-in-Differences Approach to the Estimation of Cartel Damage.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\McKinnon et al. (2014) - Removing user fees for facility-based delivery services.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Prager and Schmitt (2021) - Employer Consolidation and Wages - Evidence from Hospitals.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Roth (2022) - Pretest with Caution - Event-Study Estimates after Testing for Parallel Trends.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Roth (2024) - Interpreting Event-Studies from Recent Difference-in-Differences Methods.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Roth et al. (2023) - What's Trending in Difference-in-Differences.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Ruttenauer and Ludwig (2023) - Fixed Effects Individual Slopes.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Schmidheiny and Siegloch (2020) - On Event Studies and Distributed-Lags in TWFE Models.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Simpson and Taylor (2005) - Michigan Gasoline Pricing and the Marathon-Ashland and Ultramar Diamond Shamrock Transaction.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Sun and Abraham (2021) - Estimating Dynamic Treatment Effects in Event Studies with Heterogeneous Treatment Effects.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Sun and Shapiro (2022) - A Linear Panel Model with Heterogeneous Coefficients and Variation in Exposure.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Ulrick and Sacher (2015) - Inferring Anticompetitive Price Effects from Difference-in-Difference Analysis.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Wolfers (2006) - Did Unilateral Divorce Laws Raise Divorce Rates.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Wooldridge (2021) - Two-Way Fixed Effects, the Two-Way Mundlak Regression, and Difference-in-Differences Estimators.pdf
+C:/Users/sevan/Documents/Reading/Papers/Difference in Differences\Wooldridge (2022) - Simple Approaches to Nonlinear DiD with Panel Data.pdf
+2025-07-30 15:31:40,913 - -SEARCH QUERY- = 
+2025-07-30 15:31:40,913 - -SEARCH RESULTS- = []
+2025-07-30 15:31:40,913 - -TAB GROUP- = Input
+2025-07-30 15:31:40,913 - Starting index building process...

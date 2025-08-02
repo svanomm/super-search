@@ -1,5 +1,5 @@
 import pymupdf
-import os
+import os, tqdm
 
 # Faster chunker by approximating 1 word per 1 token. No tokenizer.
 def setup_chunker(_chunk_size:int, _chunk_overlap:int):
@@ -85,14 +85,25 @@ def prepare_PDF(in_path:str, _chunk_size:int, _chunk_overlap:int):
     except Exception as e:
         raise RuntimeError(f"Failed to open PDF: {e}")
 
+    paper_one_string = ""
+    # Iterate through each page and extract text
     try:
-        paper_one_string = preprocess(' '.join([page.get_text() for page in doc]))
+        counter=0
+        for page in tqdm.tqdm(doc, desc="Extracting text from PDF"):
+            try: 
+                print(f"Processing page {page.number + 1} of {len(doc)}")   
+                # Extract text from each page
+                page_text = page.get_text()
+                if page_text:
+                    paper_one_string += ' ' + page_text
+            except Exception as e:
+                raise RuntimeError(f"Error processing page {page.number}: {e}")
     except Exception as e:
         raise RuntimeError(f"Failed to extract text from PDF: {e}")
 
     # Initialize and apply the chunking strategy
     chunker = setup_chunker(_chunk_size, _chunk_overlap)
-    chunks = chunker(paper_one_string)
+    chunks = chunker(preprocess(paper_one_string))
 
     # Create a structured output with both processed chunks and source information
     chunk_data = {
