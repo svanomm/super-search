@@ -27,3 +27,5 @@ wheels/
 # Temporary files
 *.tmp
 *.temp
+*.jsonl
+*.npy

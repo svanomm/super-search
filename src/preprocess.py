@@ -31,11 +31,40 @@ def setup_chunker(_chunk_size:int, _chunk_overlap:int):
         return(chunks)
     return(chunker)
 
+UNICODE_WHITESPACE_CHARACTERS = [
+    "\u0000", # null
+    "\u0009", # character tabulation
+    "\u000a", # line feed
+    "\u000b", # line tabulation
+    "\u000c", # form feed
+    "\u000d", # carriage return
+    "\u0020", # space
+    "\u0085", # next line
+    "\u00a0", # no-break space
+    "\u1680", # ogham space mark
+    "\u2000", # en quad
+    "\u2001", # em quad
+    "\u2002", # en space
+    "\u2003", # em space
+    "\u2004", # three-per-em space
+    "\u2005", # four-per-em space
+    "\u2006", # six-per-em space
+    "\u2007", # figure space
+    "\u2008", # punctuation space
+    "\u2009", # thin space
+    "\u200A", # hair space
+    "\u2028", # line separator
+    "\u2029", # paragraph separator
+    "\u202f", # narrow no-break space
+    "\u205f", # medium mathematical space
+    "\u3000", # ideographic space
+]
+
 # Drop words: other words/symbols that should be removed
 drop_words = [
     '@','&',"\n","\r","©","\t","®","ø","•","◦","¿","¡","#","^","&","`","~",";",":"
     ,'_','|', '.','*','`'
-]
+] + UNICODE_WHITESPACE_CHARACTERS
 
 # Preprocessing function for PDFs
 def preprocess(text:str):
@@ -91,7 +120,7 @@ def prepare_PDF(in_path:str, _chunk_size:int, _chunk_overlap:int):
         counter=0
         for page in tqdm.tqdm(doc, desc="Extracting text from PDF"):
             try: 
-                print(f"Processing page {page.number + 1} of {len(doc)}")   
+                #print(f"Processing page {page.number + 1} of {len(doc)}")   
                 # Extract text from each page
                 page_text = page.get_text()
                 if page_text:

@@ -12,8 +12,13 @@ def query_nn(query:str, index:pynndescent.pynndescent_.NNDescent, chunks:dict
     num_results = 1 if num_results < 1 else num_results
     query_epsilon = 0.01 if query_epsilon < 0.01 else query_epsilon
 
-    # Define the model
-    model = StaticModel.from_pretrained(model_name)
+    # Define the model. USE SAME OPTIONS AS IN create_ann_index.py
+    model = StaticModel.from_pretrained(
+        model_name,
+        normalize=True,
+        dimensionality=256,
+        quantize_to="float16"
+        ) # make sure these options work with your chosen model
     
     # Encode the query
     query_vec = model.encode(preprocess(query))

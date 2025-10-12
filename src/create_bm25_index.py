@@ -3,9 +3,15 @@ Module for creating and saving a BM25 index from a processed chunk database.
 """
 
 import json, bm25s, Stemmer
+import logging
 from tqdm import tqdm
 
-def create_bm25_index(chunk_db_path:str):
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
+
+def create_bm25_index(
+        chunk_db_path:str = None,
+        chunks = None):
     """
     Loads a processed chunk database, tokenizes the corpus, creates a BM25 index,
     and saves the index to disk.
@@ -17,19 +23,26 @@ def create_bm25_index(chunk_db_path:str):
         bm25s.BM25: The BM25 retriever object after indexing the corpus.
     """
 
-    db = json.load(open(chunk_db_path, 'rb'))
+    # If given a chunks db, don't load anything
+    if chunks is None:
+        if chunk_db_path is None:
+            raise ValueError("Either chunk_db_path or chunks must be provided.")
+
+        # Load the BM25 index
+        chunks = json.load(open(chunk_db_path, 'rb'))
+    
     stemmer = Stemmer.Stemmer("english")
 
     # Tokenize the corpus
     corpus_tokens = bm25s.tokenize(
-        db['processed_chunk'],
+        chunks['processed_chunk'],
         stopwords="en",
         stemmer=stemmer,
         show_progress=True
         )
     
     # Create the BM25 model and index the corpus
-    print("Creating BM25 index...")
+    logger.info("Creating BM25 index...")
     retriever = bm25s.BM25()
     
     # Add progress tracking for the indexing step
@@ -38,9 +51,7 @@ def create_bm25_index(chunk_db_path:str):
         pbar.update(1)
 
     # Add progress tracking for the saving step
-    print("Saving the BM25 index...")
-    with tqdm(total=1, desc="Saving index to disk", unit="step") as pbar:
-        retriever.save("index_bm25", corpus=db['processed_chunk'])
-        pbar.update(1)
+    logger.info("Saving the BM25 index...")
+    retriever.save("index_bm25")
 
     return(retriever)
