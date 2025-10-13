@@ -26,9 +26,12 @@ def create_bm25_index(
     # If given a chunks db, don't load anything
     if chunks is None:
         if chunk_db_path is None:
-            raise ValueError("Either chunk_db_path or chunks must be provided.")
+            # Search for a default location index
+            try:
+                chunks = json.load(open("chunked_db.json", 'rb'))
+            except Exception as e: 
+                raise ValueError("Either chunk_db_path or chunks must be provided.")
 
-        # Load the BM25 index
         chunks = json.load(open(chunk_db_path, 'rb'))
     
     stemmer = Stemmer.Stemmer("english")

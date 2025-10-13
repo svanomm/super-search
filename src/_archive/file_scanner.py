@@ -1,5 +1,6 @@
 import os, json, glob, time, logging, hashlib, argparse, sys
 from typing import Dict, Union, List
+from datetime import datetime
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
@@ -60,7 +61,7 @@ def file_scanner(
             full_path = os.path.join(root, file)
             try:
                 # Get last modified time
-                mod_time = os.path.getmtime(full_path)
+                mod_time = datetime.fromtimestamp(os.path.getmtime(full_path)).strftime('%Y-%m-%d %H:%M:%S')
                 size = os.path.getsize(full_path)
 
                 # Hash the file properties to uniquely identify it
@@ -73,7 +74,7 @@ def file_scanner(
                 file_list['filepath'].append(full_path)
                 file_list['last_modified'].append(mod_time)
                 file_list['file_size'].append(int(size/(1024**2)))  # Size in MB
-                file_list['date_added'].append(time.time())
+                file_list['date_added'].append(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
                 file_list['file_id'].append(hash_id)
             except (OSError, IOError) as e:
                 # Skip files we can't access (permissions, etc.)
@@ -84,10 +85,20 @@ def file_scanner(
     if start_length > 0:
         added = len(file_list['filepath']) - start_length
 
-    # Save to JSON file
+    # Create a dict where file_id is the key and the element is another dict with the rest of the info
+    file_dict = {file_list['file_id'][i]: {
+        'filepath': file_list['filepath'][i],
+        'last_modified': file_list['last_modified'][i],
+        'file_size': file_list['file_size'][i],
+        'date_added': file_list['date_added'][i]
+    } for i in range(len(file_list['file_id']))}
+
+    # Save to JSON files
     try:
         with open(output_filename, 'w') as f:
             json.dump(file_list, f, indent=2)
+        with open("file_dict.json", 'w') as f:
+            json.dump(file_dict, f, indent=2)
         if flag_existing == 0:
             logging.info(f"File list saved to {output_filename} with {len(file_list['filepath'])} files.")
         else:
@@ -95,7 +106,7 @@ def file_scanner(
     except IOError as e:
         logging.warning(f"Could not save to {output_filename}: {e}")
 
-    return file_list
+    return (file_list, file_dict)
 
 
 if __name__ == "__main__":

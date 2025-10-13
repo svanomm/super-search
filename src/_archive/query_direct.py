@@ -1,8 +1,10 @@
 import json, re, os, sys
 from typing import List, Dict, Union
+from preprocess import preprocess
 
 def query_direct(query: Union[str, re.Pattern]
-                , chunk_db_path: str = None
+                , chunk_db_path:str = None
+                , chunks = None
                 , num_results: int = 3
                 , case_sensitive: bool = False
                 , is_regex: bool = False
@@ -25,42 +27,24 @@ def query_direct(query: Union[str, re.Pattern]
     ### Error checks
     num_results = 1 if num_results < 1 else num_results
     
-    # Load the chunk database
-    if chunk_db_path is None:
-        # Search for default location
-        default_paths = [
-            "chunked_db.json",
-            "../chunked_db.json",
-            "src/chunked_db.json"
-        ]
-        
-        chunk_db_path = None
-        for path in default_paths:
-            if os.path.exists(path):
-                chunk_db_path = path
-                break
-        
+    # If given a chunks db, don't load anything
+    if chunks is None:
         if chunk_db_path is None:
-            raise ValueError("chunk_db_path must be provided or a default chunked_db.json must exist.")
-    
-    # Load the database
-    try:
-        with open(chunk_db_path, 'r', encoding='utf-8') as f:
-            chunk_db = json.load(f)
-    except FileNotFoundError:
-        raise FileNotFoundError(f"Chunk database not found at: {chunk_db_path}")
-    except json.JSONDecodeError:
-        raise ValueError(f"Invalid JSON format in chunk database: {chunk_db_path}")
+            # Search for a default location index
+            try:
+                chunks = json.load(open("chunked_db.json", 'rb'))
+            except Exception as e: 
+                raise ValueError("Either chunk_db_path or chunks must be provided.")
+
+        chunks = json.load(open(chunk_db_path, 'rb'))
     
     # Validate chunk database structure
-    if 'processed_chunk' not in chunk_db or 'file_path' not in chunk_db:
-        raise ValueError("Chunk database must contain 'processed_chunk' and 'file_path' keys.")
-    
+    if 'processed_chunk' not in chunks or 'file_id' not in chunks:
+        raise ValueError("Chunk database must contain 'processed_chunk' and 'file_id' keys.")
+
     # Prepare the search pattern
-    if isinstance(query, re.Pattern):
-        pattern = query
-        is_regex = True
-    elif is_regex:
+    if is_regex == True:
+#        assert isinstance(query, re.Pattern), f"Invalid regular expression."
         try:
             flags = 0 if case_sensitive else re.IGNORECASE
             pattern = re.compile(query, flags=flags)
@@ -68,50 +52,38 @@ def query_direct(query: Union[str, re.Pattern]
             raise ValueError(f"Invalid regular expression: {e}")
     else:
         # For simple string matching, escape special regex characters
-        escaped_query = re.escape(query)
+        escaped_query = re.escape(preprocess(query))
         flags = 0 if case_sensitive else re.IGNORECASE
         pattern = re.compile(escaped_query, flags=flags)
     
     # Search through chunks
-    matches = []
-    for idx, chunk_text in enumerate(chunk_db['processed_chunk']):
+    results = {'id': [], 'score': []}
+    for idx, chunk_text in enumerate(chunks['processed_chunk']):
         # Find all matches in the chunk
-        found_matches = pattern.finditer(chunk_text)
-        match_count = 0
-        match_positions = []
-        
-        for match in found_matches:
-            match_count += 1
-            match_positions.append(match.start())
-        
+        found_matches = pattern.findall(chunk_text)
+        match_count = len(found_matches)
         if match_count > 0:
-            # Calculate a relevance score based on match count and early position
-            # Higher score for more matches and earlier positions
-            avg_position = sum(match_positions) / len(match_positions) if match_positions else len(chunk_text)
-            position_score = 1 / (1 + avg_position / len(chunk_text))
-            score = match_count * 10 + position_score
-            
-            matches.append({
-                'id': idx,
-                'score': score,
-                'match_count': match_count,
-                'chunk_text': chunk_text,
-                'filepath': chunk_db['file_path'][idx]
-            })
-    
-    # Sort by score (descending) and limit results
-    matches.sort(key=lambda x: x['score'], reverse=True)
-    matches = matches[:num_results]
-    
+            # Calculate a relevance score based on match count
+            results['id'].append(idx)
+            results['score'].append(match_count)
+
+    # Sort by score (descending) and id
+    sorted_results = sorted(zip(results['id'], results['score']), key=lambda x: (-x[1], x[0]))
+
+    # Limit to the top num_results
+    sorted_results = sorted_results[:num_results]
+
+    # normalize query scores to sum to 1
+    scores = [r[1] for r in sorted_results]
+    t=sum(scores)
+    scores = [x / t for x in scores]
+
     # Format results to match the structure of other query functions
     results = {
-        'id': [m['id'] for m in matches],
-        'score': [m['score'] for m in matches],
-        'match_count': [m['match_count'] for m in matches],
-        'chunk_text': [m['chunk_text'] for m in matches],
-        'filepath': [m['filepath'] for m in matches]
+        'id': [r[0] for r in sorted_results],
+        'score': scores
     }
-    
+
     return results
 
 

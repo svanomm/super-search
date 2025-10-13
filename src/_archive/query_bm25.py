@@ -1,4 +1,5 @@
 import json, bm25s, Stemmer
+from preprocess import preprocess
 
 def query_bm25(query:str
             , index_path:str = None
@@ -35,16 +36,21 @@ def query_bm25(query:str
     num_results = 1 if num_results < 1 else num_results
 
     # Encode the query
-    query_tokens = bm25s.tokenize(query, stopwords='en', stemmer=stemmer)
+    query_tokens = bm25s.tokenize(preprocess(query), stopwords='en', stemmer=stemmer)
 
     r, s = retriever.retrieve(query_tokens, k=num_results)
+
+    # normalize query scores to sum to 1
+    scores = s[0].tolist()
+    t=sum(scores)
+    scores = [x / t for x in scores]
     
     results = {
         'id': r[0].tolist()
-        , 'score': s[0].tolist()
+        , 'score': scores
     }
 
-    return(results)
+    return results
 
 
 if __name__ == "__main__":
