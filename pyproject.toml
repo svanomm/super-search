@@ -1,0 +1,16 @@
+[project]
+name = "super-search"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "bm25s>=0.2.14",
+    "jax[cpu]>=0.7.2",
+    "model2vec>=0.7.0",
+    "numpy>=2.3.3",
+    "pymupdf>=1.26.5",
+    "pynndescent>=0.5.13",
+    "pystemmer>=3.0.0",
+    "tqdm>=4.67.1",
+]

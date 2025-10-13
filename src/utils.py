@@ -2,10 +2,9 @@ import pymupdf
 import os, json, logging, hashlib, argparse, sys, json
 from typing import Dict, Union, List
 from datetime import datetime
+from tqdm import tqdm
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
-
-from tqdm import tqdm
 
 # Faster chunker by approximating 1 word per 1 token. No tokenizer.
 def setup_chunker(_chunk_size:int, _chunk_overlap:int):

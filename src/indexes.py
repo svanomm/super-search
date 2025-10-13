@@ -2,7 +2,6 @@ import json, bm25s, Stemmer
 import logging
 from tqdm import tqdm
 from model2vec import StaticModel
-from tqdm import tqdm
 import os, sys, pickle, lzma, time, json
 import numpy as np
 import logging
