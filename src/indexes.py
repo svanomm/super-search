@@ -29,7 +29,7 @@ def create_bm25_index(
         if chunk_db_path is None:
             # Search for a default location index
             try:
-                chunks = json.load(open("chunked_db.json", 'rb'))
+                chunks = json.load(open("./search_utils/chunked_db.json", 'rb'))
             except Exception as e: 
                 raise ValueError("Either chunk_db_path or chunks must be provided.")
 
@@ -72,7 +72,7 @@ def create_ann_index(
         if chunk_db_path is None:
             # Search for a default location index
             try:
-                chunks = json.load(open("chunked_db.json", 'rb'))
+                chunks = json.load(open("./search_utils/chunked_db.json", 'rb'))
             except Exception as e: 
                 raise ValueError("Either chunk_db_path or chunks must be provided.")
 
@@ -83,33 +83,23 @@ def create_ann_index(
         model_name,
         normalize=True,
         dimensionality=256,
-        quantize_to="float16"
+        quantize_to="float16",
+        force_download=False
         ) # make sure these options work with your chosen model
     
-    #vec_db = {'chunk_id': chunks['chunk_id']}
-
     # Encode the chunks
     logger.info("Encoding the text...")
     vecs = model.encode(chunks['processed_chunk'], show_progress_bar=True, max_length=None)
-    #vec_db['vector'] = list(np.unstack(vecs))
     
-    #logger.info("Saving the database...")
-    #with open('./vec_db.json', 'w') as f:
-    #    json.dump(vec_db, f, indent=2)    
-
     # Create the nearest-neighbor index
     logger.info("Creating the nearest-neighbor index...")
-    index = nn.NNDescent(vecs, metric='cosine', n_neighbors=10, compressed=True, verbose=True, random_state=1234, low_memory=False)
+    index = nn.NNDescent(vecs, metric='cosine', n_neighbors=10, compressed=True, verbose=True, random_state=1234, low_memory=False, n_jobs=4)
     index.prepare() # preloads the operations so that future uses are faster
 
     # Pickle the nn data
     logger.info("Saving the nearest-neighbor index...")
-    with open('nn_database.pkl', 'wb') as f:
+    with open('./search_utils/nn_database.pkl', 'wb') as f:
         pickle.dump(index, f)
-        logger.info(f"Saved the NN data to ./nn_database.pkl.")
+        logger.info(f"Saved the NN data to ./search_utils/nn_database.pkl.")
 
-    #n = len(vec_db['chunk_id'])
-    #logger.info(f"Done! Full database has {n} chunks encoded.")
-
-    #return(vec_db, index)
     return index

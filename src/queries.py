@@ -4,6 +4,9 @@ from utils import *
 from model2vec import StaticModel
 import numpy as np
 import pynndescent
+import heapq
+from concurrent.futures import ProcessPoolExecutor, as_completed
+from functools import partial
 
 def query_bm25(query:str
             , index_path:str = None
@@ -27,7 +30,7 @@ def query_bm25(query:str
         if index_path is None:
             # Search for a default location index
             try:
-                retriever = bm25s.BM25.load("index_bm25", load_corpus=True, mmap=True)
+                retriever = bm25s.BM25.load("./search_utils/index_bm25", load_corpus=True, mmap=True)
             except Exception as e:
                 raise ValueError("Either index_path or retriever must be provided.")
 
@@ -56,22 +59,55 @@ def query_bm25(query:str
 
     return results
 
+def _count_matches_chunk(idx_chunk_tuple, pattern, is_regex):
+    """
+    Helper function to count matches in a single chunk.
+    Used for parallel processing.
+    
+    Args:
+        idx_chunk_tuple: Tuple of (index, chunk_text)
+        pattern: Compiled regex pattern or lowercase query string
+        is_regex: Whether pattern is a regex
+    
+    Returns:
+        Tuple of (idx, match_count) or None if no matches
+    """
+    idx, chunk_text = idx_chunk_tuple
+    
+    if is_regex:
+        # Use finditer for memory efficiency - only count matches
+        match_count = sum(1 for _ in pattern.finditer(chunk_text))
+    else:
+        # Fast string counting for non-regex
+        match_count = chunk_text.count(pattern)
+    
+    if match_count > 0:
+        return (idx, match_count)
+    return None
+
 def query_direct(query: Union[str, re.Pattern]
                 , chunk_db_path:str = None
                 , chunks = None
                 , num_results: int = 3
                 , case_sensitive: bool = False
                 , is_regex: bool = False
+                , use_parallel: bool = True
+                , max_workers: int = None
                 ):
     """
     Search through text chunks using direct keyword matching or regular expressions.
+    
+    OPTIMIZED: Uses faster counting methods, heap-based sorting, and optional multiprocessing.
 
     Args:
         query (str or re.Pattern): Search query string or compiled regex pattern.
         chunk_db_path (str, optional): Path to the chunked database JSON file.
+        chunks (dict, optional): Pre-loaded chunks dictionary.
         num_results (int, optional): Maximum number of results to return. Defaults to 3.
         case_sensitive (bool, optional): Whether search should be case-sensitive. Defaults to False.
         is_regex (bool, optional): Whether to treat query as a regular expression. Defaults to False.
+        use_parallel (bool, optional): Use multiprocessing for parallel search. Defaults to True.
+        max_workers (int, optional): Number of parallel workers. Defaults to CPU count.
 
     Returns:
         dict: A dictionary with keys 'id', 'score', 'chunk_text', and 'filepath',
@@ -86,7 +122,7 @@ def query_direct(query: Union[str, re.Pattern]
         if chunk_db_path is None:
             # Search for a default location index
             try:
-                chunks = json.load(open("chunked_db.json", 'rb'))
+                chunks = json.load(open("./search_utils/chunked_db.json", 'rb'))
             except Exception as e: 
                 raise ValueError("Either chunk_db_path or chunks must be provided.")
 
@@ -98,43 +134,84 @@ def query_direct(query: Union[str, re.Pattern]
 
     # Prepare the search pattern
     if is_regex == True:
-#        assert isinstance(query, re.Pattern), f"Invalid regular expression."
         try:
             flags = 0 if case_sensitive else re.IGNORECASE
             pattern = re.compile(query, flags=flags)
         except re.error as e:
             raise ValueError(f"Invalid regular expression: {e}")
     else:
-        # For simple string matching, escape special regex characters
-        escaped_query = re.escape(preprocess(query))
-        flags = 0 if case_sensitive else re.IGNORECASE
-        pattern = re.compile(escaped_query, flags=flags)
+        # For simple string matching - prepare pattern based on case sensitivity
+        if case_sensitive:
+            # For case-sensitive non-regex, use plain string
+            pattern = preprocess(query)
+        else:
+            # For case-insensitive non-regex, use fast string method
+            # Store lowercase version of query for fast counting
+            pattern = preprocess(query).lower()
+    
+    # Determine if we should use parallel processing
+    # Only use parallel for large databases and regex searches
+    num_chunks = len(chunks['processed_chunk'])
+    use_parallel = use_parallel and num_chunks > 1000
     
     # Search through chunks
-    results = {'id': [], 'score': []}
-    for idx, chunk_text in enumerate(chunks['processed_chunk']):
-        # Find all matches in the chunk
-        found_matches = pattern.findall(chunk_text)
-        match_count = len(found_matches)
-        if match_count > 0:
-            # Calculate a relevance score based on match count
-            results['id'].append(idx)
-            results['score'].append(match_count)
-
-    # Sort by score (descending) and id
-    sorted_results = sorted(zip(results['id'], results['score']), key=lambda x: (-x[1], x[0]))
-
-    # Limit to the top num_results
-    sorted_results = sorted_results[:num_results]
+    results_list = []
+    
+    if use_parallel and is_regex:
+        # Parallel processing for regex searches on large databases
+        chunk_enum = list(enumerate(chunks['processed_chunk']))
+        
+        # Use ProcessPoolExecutor for CPU-bound regex operations
+        with ProcessPoolExecutor(max_workers=max_workers) as executor:
+            # Create partial function with pattern
+            search_func = partial(_count_matches_chunk, pattern=pattern, is_regex=is_regex)
+            
+            # Submit all chunks for processing
+            futures = {executor.submit(search_func, item): item for item in chunk_enum}
+            
+            # Collect results as they complete
+            for future in as_completed(futures):
+                result = future.result()
+                if result is not None:
+                    results_list.append(result)
+    else:
+        # Sequential processing for non-regex or small databases
+        for idx, chunk_text in enumerate(chunks['processed_chunk']):
+            if is_regex:
+                # Use finditer for memory efficiency - only count matches
+                match_count = sum(1 for _ in pattern.finditer(chunk_text))
+            else:
+                # Fast string counting for non-regex case-insensitive
+                if case_sensitive:
+                    match_count = chunk_text.count(pattern)
+                else:
+                    match_count = chunk_text.lower().count(pattern)
+            
+            if match_count > 0:
+                results_list.append((idx, match_count))
+    
+    # If no results found, return empty structure
+    if not results_list:
+        return {'id': [], 'score': []}
+    
+    # Use heap to get top num_results efficiently (O(n log k) instead of O(n log n))
+    if len(results_list) <= num_results:
+        # If we have fewer results than requested, use all of them
+        top_results = sorted(results_list, key=lambda x: (-x[1], x[0]))
+    else:
+        # Use nlargest for efficient partial sorting
+        top_results = heapq.nlargest(num_results, results_list, key=lambda x: (x[1], -x[0]))
+        # Sort by score descending, then by id ascending
+        top_results = sorted(top_results, key=lambda x: (-x[1], x[0]))
 
     # normalize query scores to sum to 1
-    scores = [r[1] for r in sorted_results]
-    t=sum(scores)
+    scores = [r[1] for r in top_results]
+    t = sum(scores)
     scores = [x / t for x in scores]
 
     # Format results to match the structure of other query functions
     results = {
-        'id': [r[0] for r in sorted_results],
+        'id': [r[0] for r in top_results],
         'score': scores
     }
 
@@ -154,7 +231,7 @@ def query_nn(
         if index_path is None:
             # Search for a default location index
             try:
-                index = pickle.load(open("nn_database.pkl", 'rb'))
+                index = pickle.load(open("./search_utils/nn_database.pkl", 'rb'))
             except Exception as e:
                 raise ValueError("Either index_path or index must be provided.")
 
@@ -170,7 +247,8 @@ def query_nn(
         model_name,
         normalize=True,
         dimensionality=256,
-        quantize_to="float16"
+        quantize_to="float16",
+        force_download=False
         ) # make sure these options work with your chosen model
     
     # Encode the query

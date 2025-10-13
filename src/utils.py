@@ -121,7 +121,8 @@ def prepare_PDF(in_path:str, _chunk_size:int, _chunk_overlap:int):
     # Iterate through each page and extract text
     try:
         counter=0
-        for page in tqdm(doc, desc="Extracting text from PDF"):
+        #for page in tqdm(doc, desc="Extracting text from PDF"):
+        for page in doc:
             try: 
                 #print(f"Processing page {page.number + 1} of {len(doc)}")   
                 # Extract text from each page
@@ -129,14 +130,18 @@ def prepare_PDF(in_path:str, _chunk_size:int, _chunk_overlap:int):
                 if page_text:
                     paper_one_string += ' ' + page_text
             except Exception as e:
-                raise RuntimeError(f"Error processing page {page.number}: {e}")
+                logging.warning(f"Error processing file {in_path} page {page.number}: {e}")
+                raise RuntimeError(f"Error processing file {in_path} page {page.number}: {e}")
     except Exception as e:
+        logging.warning(f"Error processing file {in_path}: {e}")
         raise RuntimeError(f"Failed to extract text from PDF: {e}")
 
-    # Initialize and apply the chunking strategy
-    chunker = setup_chunker(_chunk_size, _chunk_overlap)
-
-    return chunker(preprocess(paper_one_string))
+    if paper_one_string == '':
+        logging.warning(f"Empty PDF: {in_path}")
+    else:
+        # Initialize and apply the chunking strategy
+        chunker = setup_chunker(_chunk_size, _chunk_overlap)
+        return chunker(preprocess(paper_one_string))
 
 # Function to chunk PDFs by page
 def prepare_PDF_page(in_path:str):
@@ -191,7 +196,6 @@ def prepare_PDF_page(in_path:str):
     }
 
     return(chunk_data)
-
 
 # Function to convert text files to chunkable text
 def prepare_text(in_path:str, _chunk_size:int, _chunk_overlap:int):
@@ -343,7 +347,7 @@ default_chunk_overlap = 32
 def chunk_db(
         file_list_path:str = None
         , file_list = None
-        , output_file = "chunked_db"
+        , output_path = "./search_utils/chunked_db.json"
         , chunk_size=default_chunk_size, chunk_overlap=default_chunk_overlap
         , progress_callback=None
         ):
@@ -353,7 +357,7 @@ def chunk_db(
         if file_list_path is None:
             # Search for a default location
             try:
-                with open("./chunked_db.json", 'r') as f:
+                with open("./search_utils/chunked_db.json", 'r') as f:
                     file_list = json.load(f)
             except Exception as e:
                 raise ValueError("Either index_path or retriever must be provided.")
@@ -377,8 +381,8 @@ def chunk_db(
 
     # Process files
     logging.info(f"Processing {len(file_list['filepath'])} files for chunking...")
-    for idx, file in enumerate(file_list['filepath']):
-        logging.info(f"Processing file {idx + 1}/{len(file_list['filepath'])}: {file}")
+    for idx, file in enumerate(tqdm(file_list['filepath'], desc="Chunking files")):
+        #logging.info(f"Processing file {idx + 1}/{len(file_list['filepath'])}: {file}")
         # Find the corresponding file_id
         f_id = file_list['file_id'][idx]
 
@@ -394,12 +398,13 @@ def chunk_db(
         else:
             chunks = prepare_text(file, _chunk_overlap=chunk_overlap, _chunk_size=chunk_size)
         
-        full_dict['processed_chunk'].extend(chunks)
-        full_dict['file_id'].extend([f_id] * len(chunks))
+        if chunks is not None:
+            full_dict['processed_chunk'].extend(chunks)
+            full_dict['file_id'].extend([f_id] * len(chunks))
 
         # Call the progress callback if provided
-        if progress_callback is not None:
-            progress_callback(idx + 1)
+        #if progress_callback is not None:
+        #    progress_callback(idx + 1)
 
     logging.info("Done processing files.")
 
@@ -408,11 +413,11 @@ def chunk_db(
 
     # Export as JSON
     logging.info(f"Saving chunk database to file...")
-    with open(f'./{output_file}.json', 'w', encoding='utf-8') as f:
+    with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(full_dict, f, ensure_ascii=False, indent=2)
 
     logging.info(f"Processed {len(full_dict['processed_chunk'])} chunks from {len(file_list['filepath'])} files.")
-    logging.info(f"Data saved to ./{output_file}.json")
+    logging.info(f"Data saved to {output_path}")
 
     return full_dict
 
@@ -429,7 +434,7 @@ def chunk_db_page(
         if file_list_path is None:
             # Search for a default location
             try:
-                with open("./chunked_db.json", 'r') as f:
+                with open("./search_utils/chunked_db.json", 'r') as f:
                     file_list = json.load(f)
             except Exception as e:
                 raise ValueError("Either index_path or retriever must be provided.")
@@ -496,7 +501,6 @@ def chunk_db_page(
     logging.info(f"Data saved to ./{output_file}.json")
 
     return full_dict
-
 
 def convert_results(results, chunks, file_dict):
     """
