@@ -8,6 +8,21 @@ logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
 # Faster chunker by approximating 1 word per 1 token. No tokenizer.
 def setup_chunker(_chunk_size:int, _chunk_overlap:int):
+    """
+    Create a chunking function with specified chunk size and overlap parameters.
+    
+    This function returns a closure that splits text into overlapping chunks based on word boundaries.
+    It approximates 1 word per 1 token for efficiency without using a tokenizer. If chunk_size is False,
+    the entire document is treated as a single chunk.
+
+    Args:
+        _chunk_size (int or bool): Target number of words per chunk. Set to False to treat entire document as one chunk.
+        _chunk_overlap (int): Number of overlapping words between consecutive chunks to maintain context.
+
+    Returns:
+        function: A chunker function that takes text and returns a list of text chunks.
+            The returned function signature is: chunker(text, chunk_size, chunk_overlap) -> List[str]
+    """
     # Option to treat the entire document as 1 chunk
     if _chunk_size == False:
         _chunk_size = 999999999
@@ -73,6 +88,18 @@ drop_words = [
 
 # Preprocessing function for PDFs
 def preprocess(text:str):
+    """
+    Clean and normalize text by removing unwanted characters and formatting.
+    
+    This function performs several text cleaning operations including connecting hyphenated words across lines,
+    removing special characters and Unicode whitespace, eliminating double punctuation, and trimming whitespace.
+
+    Args:
+        text (str): Raw text to be preprocessed.
+
+    Returns:
+        str: Cleaned and normalized text with standardized spacing and punctuation.
+    """
     # Connect words across lines
     text = text.replace('-\n', '')
     # Drop words we don't care about where the symbol appears, doesn't need spaces
@@ -280,7 +307,7 @@ def file_scanner(
             start_length=len(file_list['filepath'])
 
     if output_filename is None:
-        output_filename = "file_list.json"
+        output_filename = "./search_utils/file_list.json"
 
     # Use os.walk for recursive directory traversal
     logging.info(f"Searching for files in {filepath} with allowed types: {allowed_text_types}")
@@ -329,7 +356,7 @@ def file_scanner(
     try:
         with open(output_filename, 'w') as f:
             json.dump(file_list, f, indent=2)
-        with open("file_dict.json", 'w') as f:
+        with open("./search_utils/file_dict.json", 'w') as f:
             json.dump(file_dict, f, indent=2)
         if flag_existing == 0:
             logging.info(f"File list saved to {output_filename} with {len(file_list['filepath'])} files.")
@@ -351,6 +378,34 @@ def chunk_db(
         , chunk_size=default_chunk_size, chunk_overlap=default_chunk_overlap
         , progress_callback=None
         ):
+    """
+    Process a list of files into preprocessed text chunks and save to a database.
+    
+    This function takes a file list, processes each file (PDF or text) into overlapping chunks,
+    preprocesses the text, and saves the results to a JSON file. Each chunk is associated with
+    its source file ID for traceability.
+
+    Args:
+        file_list_path (str, optional): Path to JSON file containing the file list with required keys:
+            'filepath', 'last_modified', 'file_size', 'date_added', 'file_id'.
+        file_list (dict, optional): Pre-loaded file list dictionary. If provided, file_list_path is ignored.
+        output_path (str, optional): Path where the chunk database JSON file will be saved.
+            Defaults to "./search_utils/chunked_db.json".
+        chunk_size (int, optional): Number of words per chunk. Defaults to 512.
+        chunk_overlap (int, optional): Number of overlapping words between chunks. Defaults to 32.
+        progress_callback (callable, optional): Callback function called with progress updates (currently unused).
+
+    Returns:
+        dict: Dictionary containing:
+            - 'processed_chunk': List of preprocessed text chunks
+            - 'file_id': List of file IDs corresponding to each chunk
+            - 'chunk_id': List of sequential chunk identifiers
+
+    Raises:
+        ValueError: If neither file_list_path nor file_list are provided and default location is not found,
+            or if the file list format is invalid.
+        AssertionError: If no files are found in the file list.
+    """
 
     # If given a file_list, don't load anything
     if file_list is None:
@@ -428,6 +483,35 @@ def chunk_db_page(
         , chunk_size=default_chunk_size, chunk_overlap=default_chunk_overlap
         , progress_callback=None
         ):
+    """
+    Process files into preprocessed text chunks with page number tracking for PDFs.
+    
+    Similar to chunk_db but additionally tracks page numbers for PDF files. For non-PDF files,
+    page_number is set to 0. The resulting database includes page information for each chunk,
+    enabling page-level document navigation.
+
+    Args:
+        file_list_path (str, optional): Path to JSON file containing the file list with required keys:
+            'filepath', 'last_modified', 'file_size', 'date_added', 'file_id'.
+        file_list (dict, optional): Pre-loaded file list dictionary. If provided, file_list_path is ignored.
+        output_file (str, optional): Filename (without extension) for the output JSON file.
+            Defaults to "chunked_db" (saved as "./chunked_db.json").
+        chunk_size (int, optional): Number of words per chunk. Defaults to 512.
+        chunk_overlap (int, optional): Number of overlapping words between chunks. Defaults to 32.
+        progress_callback (callable, optional): Callback function called with progress updates after each file.
+
+    Returns:
+        dict: Dictionary containing:
+            - 'processed_chunk': List of preprocessed text chunks
+            - 'file_id': List of file IDs corresponding to each chunk
+            - 'page_number': List of page numbers (0 for non-PDF files)
+            - 'chunk_id': List of sequential chunk identifiers
+
+    Raises:
+        ValueError: If neither file_list_path nor file_list are provided and default location is not found,
+            or if the file list format is invalid.
+        AssertionError: If no files are found in the file list.
+    """
 
     # If given a file_list, don't load anything
     if file_list is None:
@@ -504,9 +588,9 @@ def chunk_db_page(
 
 def convert_results(results, chunks, file_dict):
     """
-    Convert search results results to include full chunk and file properties.
+    Convert search results to include full chunk and file properties.
     Args:
-        results (dict): The BM25 results with 'id' and 'score'.
+        results (dict): The query results with 'id' and 'score'.
         chunks (dict): The chunks data with 'processed_chunk', 'chunk_id', and 'file_id'.
         file_dict (dict): A dictionary mapping file_id to file properties.
     Returns:

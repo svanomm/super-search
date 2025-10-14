@@ -28,14 +28,22 @@ A powerful local semantic indexing and search tool for document repositories tha
    cd super-search
    ```
 
-2. **Install dependencies**:
+2. **Install dependencies using uv**:
    ```bash
-   pip install -r requirements.txt
+   # Install uv if you haven't already
+   pip install uv
+   
+   # Install project dependencies
+   uv sync
    ```
 
-3. **Navigate to the Python Code directory**:
+3. **Activate the virtual environment**:
    ```bash
-   cd "Python Code"
+   # Windows
+   .venv\Scripts\activate
+   
+   # Linux/Mac
+   source .venv/bin/activate
    ```
 
 ## Usage
@@ -52,14 +60,51 @@ The GUI provides three main tabs:
 - **Search Tab**: Perform searches on indexed documents
 - **Logging Tab**: View application logs and debug information
 
-### Command Line Interface
+### Interactive Command Line Interface
 
-For testing and development, use the CLI demo:
+Launch the interactive CLI for a streamlined search experience:
 ```bash
-python cli_search_demo.py
+# Activate the virtual environment first
+.venv\Scripts\activate  # Windows
+# or
+source .venv/bin/activate  # Linux/Mac
+
+# Run the CLI
+python cli.py
 ```
 
-### Basic Workflow
+The interactive CLI provides:
+- **Guided initialization**: Step-by-step setup for scanning documents and building indexes
+- **Multiple search modes**: BM25 keyword search, direct/regex search, and semantic search
+- **Persistent session**: Indexes stay in memory for fast repeated searches
+- **Formatted results**: Clean, readable output with file information and text previews
+
+### Basic Workflow (CLI)
+
+1. **Initialize the System**:
+   ```bash
+   python cli.py
+   ```
+   - Select "Initialize system" from the main menu
+   - Choose the directory containing your documents
+   - Configure chunking parameters (chunk size, overlap)
+   - Enable/disable semantic search
+   - Wait for the system to scan files and build indexes
+
+2. **Search Your Documents**:
+   - Select "Perform search" from the main menu
+   - Choose a search type:
+     - **BM25 Search**: Fast keyword-based retrieval
+     - **Direct Search**: Exact or regex pattern matching
+     - **Semantic Search**: Meaning-based intelligent search
+   - Enter your query and specify number of results
+   - View formatted results with scores and file information
+
+3. **Repeat Searches**:
+   - The CLI keeps indexes in memory for fast repeated queries
+   - No need to re-initialize unless you add new documents
+
+### Basic Workflow (GUI)
 
 1. **Index Your Documents**:
    - Open the GUI application

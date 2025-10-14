@@ -2,15 +2,22 @@
 from utils import *
 from queries import *
 from indexes import *
+from initialize import *
 
 repo = r"C:\Users\Steven\Documents\Python\Data\NBER 1000"
 
-files, file_dict = file_scanner(repo)
+return_packet = initialize(
+    path=repo,
+    chunk_size=256,
+    chunk_overlap=16,
+    semantic_search=True
+)
 
-chunks = chunk_db(file_list=files, chunk_size=256, chunk_overlap=16)
-
-retriever = create_bm25_index(chunks=chunks)
-index = create_ann_index(chunks=chunks)
+files = return_packet['files']
+file_dict = return_packet['file_dict']
+chunks = return_packet['chunks']
+retriever = return_packet['bm25_retriever']
+index = return_packet['ann_index']
 
 text = "Current Population Survey (CPS)"
 

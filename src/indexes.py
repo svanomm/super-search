@@ -14,14 +14,23 @@ def create_bm25_index(
         chunk_db_path:str = None,
         chunks = None):
     """
-    Loads a processed chunk database, tokenizes the corpus, creates a BM25 index,
-    and saves the index to disk.
+    Create a BM25 full-text search index from a processed chunk database.
+    
+    This function tokenizes the corpus using English stopwords and stemming, creates a BM25 index
+    for efficient keyword-based document retrieval, and saves the index to disk for later use.
+    Either a chunk database path or pre-loaded chunks must be provided.
 
     Args:
-        chunk_db_path (str): Path to the JSON file containing the processed chunk database.
+        chunk_db_path (str, optional): Path to the JSON file containing the processed chunk database.
+            If None and chunks is None, attempts to load from default location './search_utils/chunked_db.json'.
+        chunks (dict, optional): Pre-loaded chunk database dictionary containing 'processed_chunk' key.
+            If provided, chunk_db_path is ignored.
 
     Returns:
-        bm25s.BM25: The BM25 retriever object after indexing the corpus.
+        bm25s.BM25: The BM25 retriever object after indexing the corpus, ready for query operations.
+        
+    Raises:
+        ValueError: If neither chunk_db_path nor chunks are provided and default location is not found.
     """
 
     # If given a chunks db, don't load anything
@@ -56,7 +65,7 @@ def create_bm25_index(
 
     # Add progress tracking for the saving step
     logger.info("Saving the BM25 index...")
-    retriever.save("index_bm25")
+    retriever.save("./search_utils/index_bm25")
 
     return(retriever)
 
@@ -66,6 +75,27 @@ def create_ann_index(
         chunks = None,
         model_name = "minishlab/potion-retrieval-32M"
     ):
+    """
+    Create an Approximate Nearest Neighbor (ANN) index for semantic search using static embeddings.
+    
+    This function encodes text chunks into vector embeddings using a Model2Vec static embedding model,
+    then builds a PyNNDescent index for efficient similarity search. The index is saved to disk
+    for later use in semantic query operations.
+
+    Args:
+        chunk_db_path (str, optional): Path to the JSON file containing the processed chunk database.
+            If None and chunks is None, attempts to load from default location './search_utils/chunked_db.json'.
+        chunks (dict, optional): Pre-loaded chunk database dictionary containing 'processed_chunk' key.
+            If provided, chunk_db_path is ignored.
+        model_name (str, optional): Name of the Model2Vec model to use for embeddings.
+            Defaults to "minishlab/potion-retrieval-32M".
+
+    Returns:
+        pynndescent.NNDescent: The nearest neighbor index object ready for similarity queries.
+        
+    Raises:
+        ValueError: If neither chunk_db_path nor chunks are provided and default location is not found.
+    """
 
     # If given a chunks db, don't load anything
     if chunks is None:

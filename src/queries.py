@@ -14,15 +14,27 @@ def query_bm25(query:str
             , num_results:int = 3
             ):
     """
-    Retrieve the top-k most relevant documents for a given query using a BM25 index.
+    Retrieve the top-k most relevant text chunks using BM25 keyword-based search.
+    
+    This function performs full-text search using the BM25 ranking algorithm. The query is preprocessed,
+    tokenized with English stopwords and stemming, and matched against the indexed corpus. Scores are
+    normalized to sum to 1.
 
     Args:
-        query (str): The search query string.
-        index_path (str): Path to the BM25 index file.
-        num_results (int, optional): Number of top results to return. Defaults to 3.
+        query (str): The search query string to find relevant documents.
+        index_path (str, optional): Path to the BM25 index directory. If None and retriever is None,
+            attempts to load from default location './search_utils/index_bm25'.
+        retriever (bm25s.BM25, optional): Pre-loaded BM25 retriever object. If provided, index_path is ignored.
+        num_results (int, optional): Maximum number of top results to return. Defaults to 3.
+            Minimum value is 1.
 
     Returns:
-        dict: A dictionary with keys 'text' and 'id', each containing a list of results.
+        dict: Dictionary containing:
+            - 'id': List of chunk IDs (indices) for the top results
+            - 'score': List of normalized relevance scores (sum to 1)
+
+    Raises:
+        ValueError: If neither index_path nor retriever are provided and default location is not found.
     """
 
     # If given a file_list, don't load anything
@@ -61,16 +73,18 @@ def query_bm25(query:str
 
 def _count_matches_chunk(idx_chunk_tuple, pattern, is_regex):
     """
-    Helper function to count matches in a single chunk.
-    Used for parallel processing.
+    Count occurrences of a pattern in a single text chunk for parallel processing.
+    
+    This helper function is designed for use with multiprocessing to count matches
+    in text chunks. It handles both regex patterns and simple string matching efficiently.
     
     Args:
-        idx_chunk_tuple: Tuple of (index, chunk_text)
-        pattern: Compiled regex pattern or lowercase query string
-        is_regex: Whether pattern is a regex
+        idx_chunk_tuple (tuple): Tuple containing (chunk_index, chunk_text).
+        pattern (re.Pattern or str): Compiled regex pattern or lowercase query string for matching.
+        is_regex (bool): If True, pattern is treated as a regex; if False, uses string counting.
     
     Returns:
-        Tuple of (idx, match_count) or None if no matches
+        tuple or None: Tuple of (chunk_index, match_count) if matches found, None otherwise.
     """
     idx, chunk_text = idx_chunk_tuple
     
@@ -95,23 +109,33 @@ def query_direct(query: Union[str, re.Pattern]
                 , max_workers: int = None
                 ):
     """
-    Search through text chunks using direct keyword matching or regular expressions.
+    Search text chunks using direct keyword matching or regular expressions with optional parallel processing.
     
-    OPTIMIZED: Uses faster counting methods, heap-based sorting, and optional multiprocessing.
+    This optimized function supports both simple string matching and complex regex patterns. It uses
+    heap-based sorting for efficiency and can leverage multiprocessing for large databases with regex searches.
+    Results are ranked by match count and scores are normalized to sum to 1.
 
     Args:
-        query (str or re.Pattern): Search query string or compiled regex pattern.
-        chunk_db_path (str, optional): Path to the chunked database JSON file.
-        chunks (dict, optional): Pre-loaded chunks dictionary.
-        num_results (int, optional): Maximum number of results to return. Defaults to 3.
+        query (str or re.Pattern): Search query string or compiled regex pattern to match in chunks.
+        chunk_db_path (str, optional): Path to the chunked database JSON file. If None and chunks is None,
+            attempts to load from default location './search_utils/chunked_db.json'.
+        chunks (dict, optional): Pre-loaded chunks dictionary containing 'processed_chunk' and 'file_id' keys.
+            If provided, chunk_db_path is ignored.
+        num_results (int, optional): Maximum number of top results to return. Defaults to 3. Minimum value is 1.
         case_sensitive (bool, optional): Whether search should be case-sensitive. Defaults to False.
         is_regex (bool, optional): Whether to treat query as a regular expression. Defaults to False.
-        use_parallel (bool, optional): Use multiprocessing for parallel search. Defaults to True.
-        max_workers (int, optional): Number of parallel workers. Defaults to CPU count.
+        use_parallel (bool, optional): Enable multiprocessing for parallel search. Only used for databases
+            with >1000 chunks. Defaults to True.
+        max_workers (int, optional): Number of parallel worker processes. Defaults to CPU count if None.
 
     Returns:
-        dict: A dictionary with keys 'id', 'score', 'chunk_text', and 'filepath',
-              each containing a list of results.
+        dict: Dictionary containing:
+            - 'id': List of chunk IDs (indices) for the top results
+            - 'score': List of normalized match count scores (sum to 1)
+
+    Raises:
+        ValueError: If neither chunk_db_path nor chunks are provided and default location is not found,
+            if chunk database structure is invalid, or if regex pattern is invalid.
     """
     
     ### Error checks
@@ -225,6 +249,36 @@ def query_nn(
         num_results:int = 3,
         query_epsilon:float = 0.1
     ):
+    """
+    Perform semantic similarity search using Approximate Nearest Neighbor (ANN) index.
+    
+    This function encodes the query using a Model2Vec static embedding model and searches for the
+    most semantically similar chunks using cosine distance. The query is preprocessed before encoding.
+    Scores are inverted (since lower distance is better) and normalized to sum to 1.
+
+    Args:
+        query (str): The search query string to find semantically similar documents.
+        index (pynndescent.NNDescent, optional): Pre-loaded nearest neighbor index. If provided, index_path is ignored.
+        index_path (str, optional): Path to the pickled NN index file. If None and index is None,
+            attempts to load from default location './search_utils/nn_database.pkl'.
+        model_name (str, optional): Name of the Model2Vec embedding model to use. Must match the model
+            used during index creation. Defaults to "minishlab/potion-retrieval-32M".
+        num_results (int, optional): Maximum number of top results to return. Defaults to 3. Minimum value is 1.
+        query_epsilon (float, optional): Search accuracy parameter for ANN algorithm. Lower values are more accurate
+            but slower. Defaults to 0.1. Minimum value is 0.01.
+
+    Returns:
+        dict: Dictionary containing:
+            - 'id': List of chunk IDs (indices) for the most similar results
+            - 'score': List of normalized inverted distance scores (sum to 1, higher is more similar)
+
+    Raises:
+        ValueError: If neither index_path nor index are provided and default location is not found.
+        
+    Note:
+        Model configuration (normalize, dimensionality, quantize_to) must match the settings used
+        during index creation for consistent results.
+    """
 
     # If given a file_list, don't load anything
     if index is None:
