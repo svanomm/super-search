@@ -2,9 +2,8 @@ import json, bm25s, Stemmer
 import logging
 from tqdm import tqdm
 from model2vec import StaticModel
-import os, sys, pickle, lzma, time, json
+import pickle, json
 import numpy as np
-import logging
 import pynndescent as nn
 
 logger = logging.getLogger(__name__)

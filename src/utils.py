@@ -6,50 +6,8 @@ from tqdm import tqdm
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
-# Faster chunker by approximating 1 word per 1 token. No tokenizer.
-def setup_chunker(_chunk_size:int, _chunk_overlap:int):
-    """
-    Create a chunking function with specified chunk size and overlap parameters.
-    
-    This function returns a closure that splits text into overlapping chunks based on word boundaries.
-    It approximates 1 word per 1 token for efficiency without using a tokenizer. If chunk_size is False,
-    the entire document is treated as a single chunk.
-
-    Args:
-        _chunk_size (int or bool): Target number of words per chunk. Set to False to treat entire document as one chunk.
-        _chunk_overlap (int): Number of overlapping words between consecutive chunks to maintain context.
-
-    Returns:
-        function: A chunker function that takes text and returns a list of text chunks.
-            The returned function signature is: chunker(text, chunk_size, chunk_overlap) -> List[str]
-    """
-    # Option to treat the entire document as 1 chunk
-    if _chunk_size == False:
-        _chunk_size = 999999999
-    if 2 * _chunk_overlap > _chunk_size:
-        _chunk_overlap = round(_chunk_size / 2)
-        print(f"Warning: chunk overlap too large, setting to {_chunk_overlap}.")
-
-    def chunker(text, chunk_size = _chunk_size, chunk_overlap = _chunk_overlap):
-        # Split text into words
-        words = text.split(' ')
-        chunks = []
-        if chunk_size > len(words):
-            chunk_size = len(words)
-        start = 0
-        end = chunk_size  # Fixed: Remove the -1
-        while end <= len(words):  # Fixed: Use <= since we're now using inclusive end
-            chunk = ' '.join(words[start:end])  # This now correctly includes chunk_size words
-            chunks.append(chunk)
-            start = end - chunk_overlap
-            end = start + chunk_size  # Fixed: Maintain consistent chunk size
-
-        # Handle remaining words if any
-        if start < len(words):
-            chunks.append(' '.join(words[start:]))
-
-        return(chunks)
-    return(chunker)
+#### Define constants/defaults for various functions below
+file_list_defaults = ['filepath', 'filename', 'last_modified', 'file_size', 'date_added', 'file_id']
 
 UNICODE_WHITESPACE_CHARACTERS = [
     "\u0000", # null
@@ -80,11 +38,64 @@ UNICODE_WHITESPACE_CHARACTERS = [
     "\u3000", # ideographic space
 ]
 
+allowed_texts = ['.pdf', '.txt', '.r', '.do', '.py', '.ipynb', '.sas', '.sql', '.vba', '.md']
+
+default_chunk_size = 512
+default_chunk_overlap = 32
+
 # Drop words: other words/symbols that should be removed
 drop_words = [
     '@','&',"\n","\r","©","\t","®","ø","•","◦","¿","¡","#","^","&","`","~",";",":"
     ,'_','|', '.','*','`'
 ] + UNICODE_WHITESPACE_CHARACTERS
+
+# Faster chunker by approximating 1 word per 1 token. No tokenizer.
+def setup_chunker(_chunk_size:int, _chunk_overlap:int):
+    """
+    Create a chunking function with specified chunk size and overlap parameters.
+    
+    This function returns a closure that splits text into overlapping chunks based on word boundaries.
+    It approximates 1 word per 1 token for efficiency without using a tokenizer. If chunk_size is False,
+    the entire document is treated as a single chunk.
+
+    Args:
+        _chunk_size (int or bool): Target number of words per chunk. Set to False to treat entire document as one chunk.
+        _chunk_overlap (int): Number of overlapping words between consecutive chunks to maintain context.
+
+    Returns:
+        function: A chunker function that takes text and returns a list of text chunks.
+            The returned function signature is: chunker(text, chunk_size, chunk_overlap) -> List[str]
+    """
+    # Option to treat the entire document as 1 chunk
+    if _chunk_size == False:
+        _chunk_size = 999999999
+    if 2 * _chunk_overlap > _chunk_size:
+        _chunk_overlap = round(_chunk_size / 2)
+        print(f"Warning: chunk overlap too large, setting to {_chunk_overlap}.")
+
+    def chunker(text, chunk_size = _chunk_size, chunk_overlap = _chunk_overlap):
+        # Split text into words
+        words = text.split(' ')
+        
+        if chunk_size > len(words):
+            return [text]
+        else:
+            chunks = []
+            start = 0
+            end = chunk_size  # Fixed: Remove the -1
+            while end <= len(words):  # Fixed: Use <= since we're now using inclusive end
+                chunk = ' '.join(words[start:end])  # This now correctly includes chunk_size words
+                chunks.append(chunk)
+                start = end - chunk_overlap
+                end = start + chunk_size  # Fixed: Maintain consistent chunk size
+
+            # Handle remaining words if any
+            if start < len(words):
+                chunks.append(' '.join(words[start:]))
+
+            return chunks
+    return chunker
+
 
 # Preprocessing function for PDFs
 def preprocess(text:str):
@@ -249,21 +260,29 @@ def prepare_text(in_path:str, _chunk_size:int, _chunk_overlap:int):
     """
     if not os.path.isfile(in_path):
         raise FileNotFoundError(f"File not found: {in_path}")
+    
+    chunker = setup_chunker(_chunk_size, _chunk_overlap)
     try:
         with open(in_path, 'r', encoding='utf-8') as file:
             doc = file.read()
+
+        # convert list into string
+        paper_one_string = preprocess(doc)
+
+        # chunk the raw text
+        return chunker(paper_one_string)
+    
     except Exception as e:
-        raise RuntimeError(f"Failed to read text file: {e}")
+        try:
+            with open(in_path, 'r') as file: # try non-utf8 encoding
+                doc = file.read()
 
-    # convert list into string
-    paper_one_string = preprocess(doc)
+            # convert list into string
+            paper_one_string = preprocess(doc)
 
-    # chunk the raw text
-    chunker = setup_chunker(_chunk_size, _chunk_overlap)
-
-    return chunker(paper_one_string)
-
-allowed_texts = ['.pdf', '.txt', '.r', '.do', '.py', '.ipynb', '.sas', '.sql', '.vba', '.md']
+            return chunker(paper_one_string)
+        except Exception as e:
+            raise RuntimeError(f"Failed to read text file: {e}")
 
 def file_scanner(
         filepath:str = None, 
@@ -292,14 +311,12 @@ def file_scanner(
         logging.info("You did not specify a path, so using the current working directory.")
 
     if file_list_path is None:
-        file_list = {
-            'filepath': [], 'last_modified': [], 'file_size': [], 'date_added': [], 'file_id': []
-        }
+        file_list = {key: [] for key in file_list_defaults}
     else:
         with open(file_list_path, 'r') as f:
             file_list = json.load(f)
         # Check if the file_list has the required keys
-        if not all(key in file_list for key in ['filepath', 'last_modified', 'file_size', 'date_added', 'file_id']):
+        if not all(key in file_list for key in file_list_defaults):
             raise ValueError("Invalid file list format. Missing required keys.")
         else:
             logging.info("Successfully loaded existing file list.")
@@ -329,8 +346,12 @@ def file_scanner(
                 # check if file-instance already in the list
                 if hash_id in file_list['file_id']:
                     continue
+
+                # Extract filename from path
+                filename =  os.path.splitext(file)[0]
                 
                 file_list['filepath'].append(full_path)
+                file_list['filename'].append(preprocess(filename))
                 file_list['last_modified'].append(mod_time)
                 file_list['file_size'].append(int(size/(1024**2)))  # Size in MB
                 file_list['date_added'].append(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
@@ -366,10 +387,6 @@ def file_scanner(
         logging.warning(f"Could not save to {output_filename}: {e}")
 
     return (file_list, file_dict)
-
-
-default_chunk_size = 512
-default_chunk_overlap = 32
 
 def chunk_db(
         file_list_path:str = None
@@ -422,7 +439,7 @@ def chunk_db(
             file_list = json.load(f)
 
     # Check if the file_list has the required keys
-    if not all(key in file_list for key in ['filepath', 'last_modified', 'file_size', 'date_added', 'file_id']):
+    if not all(key in file_list for key in file_list_defaults):
         raise ValueError("Invalid file list format. Missing required keys.")
     else:
         logging.info("Successfully loaded existing file list.")
@@ -430,6 +447,7 @@ def chunk_db(
     full_dict = {
         'processed_chunk': []
         , 'file_id': []
+        , 'file_name': []
     }
 
     assert len(file_list['filepath']) > 0, "No files found in the file list."
@@ -440,6 +458,7 @@ def chunk_db(
         #logging.info(f"Processing file {idx + 1}/{len(file_list['filepath'])}: {file}")
         # Find the corresponding file_id
         f_id = file_list['file_id'][idx]
+
 
         # Confirm file exists
         if not os.path.exists(file):
@@ -528,7 +547,7 @@ def chunk_db_page(
             file_list = json.load(f)
 
     # Check if the file_list has the required keys
-    if not all(key in file_list for key in ['filepath', 'last_modified', 'file_size', 'date_added', 'file_id']):
+    if not all(key in file_list for key in file_list_defaults):
         raise ValueError("Invalid file list format. Missing required keys.")
     else:
         logging.info("Successfully loaded existing file list.")

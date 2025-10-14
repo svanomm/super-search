@@ -4,23 +4,26 @@ Interactive Command Line Interface for Super Search
 A local document search engine with keyword and semantic search capabilities.
 """
 
-import os
-import sys
-import logging
-import argparse
-import warnings
+print("\n" + "="*70)
+print(" "*20 + "SUPER SEARCH - Local Search Engine")
+print("="*70 + "\n")
+print("Loading, please wait...\n")
+
+import os,sys,logging,argparse,warnings,io
 from pathlib import Path
+# silence command-line output temporarily
+sys.stdout, sys.stderr = io.StringIO(), io.StringIO()
 
 # Suppress all logging and warnings early, before imports
 # This will be reconfigured later based on command-line arguments
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Suppress TensorFlow logs if present
-logging.basicConfig(level=logging.CRITICAL)
-warnings.filterwarnings('ignore')
-
-# Suppress specific loggers before importing packages
-for logger_name in ['jax', 'jax._src', 'jaxlib', 'absl', 'bm25s', 'model2vec', 'pynndescent', 'pymupdf', 'tqdm']:
-    logging.getLogger(logger_name).setLevel(logging.CRITICAL)
-    logging.getLogger(logger_name).propagate = False
+#os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Suppress TensorFlow logs if present
+#logging.basicConfig(level=logging.CRITICAL)
+#warnings.filterwarnings('ignore')
+#
+## Suppress specific loggers before importing packages
+#for logger_name in ['jax', 'jax._src', 'jaxlib', 'absl', 'bm25s', 'model2vec', 'pynndescent', 'pymupdf', 'tqdm']:
+#    logging.getLogger(logger_name).setLevel(logging.CRITICAL)
+#    logging.getLogger(logger_name).propagate = False
 
 # Add src directory to path
 src_path = Path(__file__).parent / "src"
@@ -30,6 +33,8 @@ from utils import convert_results
 from queries import query_bm25, query_direct, query_nn
 from initialize import initialize, load_existing_indices
 
+# unsilence command-line output
+sys.stdout, sys.stderr = sys.__stdout__, sys.__stderr__
 
 def setup_logging(verbose=False):
     """
@@ -74,12 +79,6 @@ class SearchCLI:
         self.initialized = False
         self.has_semantic = False
         self.mode = None  # 'simplified' or 'advanced'
-        
-    def print_banner(self):
-        """Print welcome banner."""
-        print("\n" + "="*70)
-        print(" "*20 + "SUPER SEARCH - Local Search Engine")
-        print("="*70 + "\n")
     
     def select_mode(self):
         """Allow user to select simplified or advanced mode."""
@@ -353,11 +352,11 @@ class SearchCLI:
             while True:
                 print("\n--- SEARCH ---")
                 print("Using: BM25 keyword search, 5 results")
-                print("\nEnter 'back' to return to main menu")
+                print("\nPress Ctrl+C or enter 'exit!' to exit.")
                 
                 query_text = input("\nEnter your search query: ").strip()
                 
-                if query_text.lower() == 'back':
+                if query_text.lower() == 'exit!':
                     break
                 
                 if not query_text:
@@ -479,28 +478,15 @@ class SearchCLI:
     
     def main_menu(self):
         """Display main menu and handle user choices."""
+        # If not initialized on first entry, go directly to initialization
+        if not self.initialized:
+            self.initialize_system()
+        
         while True:
             print("\n--- MAIN MENU ---")
             mode_display = f" ({self.mode.title()} Mode)" if self.mode else ""
             if self.initialized:
-                print(f"Status: System initialized ✓{mode_display}")
-                print("\n1. Perform search")
-                print("2. Re-initialize system")
-                print("3. Exit")
-                
-                choice = input("\nSelect option (1-3): ").strip()
-                
-                if choice == '1':
-                    self.search_menu()
-                elif choice == '2':
-                    confirm = input("This will re-scan documents. Continue? (y/n): ").strip().lower()
-                    if confirm in ['y', 'yes']:
-                        self.initialize_system()
-                elif choice == '3':
-                    print("\nThank you for using Super Search!")
-                    break
-                else:
-                    print("Invalid choice. Please try again.")
+                self.search_menu()
             else:
                 print(f"Status: System not initialized{mode_display}")
                 print("\n1. Initialize system")
@@ -519,7 +505,6 @@ class SearchCLI:
     def run(self):
         """Main entry point for the CLI application."""
         try:
-            self.print_banner()
             self.main_menu()
         except KeyboardInterrupt:
             print("\n\nInterrupted by user. Exiting...")
